@@ -1,101 +1,97 @@
-import React, { useRef, useState, useEffect } from 'react'
-import * as grapesJS from 'grapesjs'
-import grapesJSMJML from 'grapesjs-mjml'
+import React, { useRef, useState, useEffect } from "react";
+import grapesJS from "grapesjs";
+import grapesJSMJML from "grapesjs-mjml";
+import TypePlugin from "grapesjs-typed";
 
 interface Props {
-  children: React.ReactNode | React.ReactNode[]
+  children: React.ReactNode | React.ReactNode[];
 }
 
 const Editor: React.FC<Props> = ({ children }) => {
-  const editorDevContainerRef = useRef<HTMLDivElement>(null)
-  const [editor, setEditor] = useState<grapesJS.Editor>(null)
+  const editorDevContainerRef = useRef<HTMLDivElement>(null);
+  const [editor, setEditor] = useState<any>(null);
 
   const uploadEmailTemplateAssetsUrlToBucket = async () => {
     // implementation here
-  }
+  };
   const getEmailTemplateAssetsUrlFromBucket = async () => {
     // implementation here
-  }
+  };
 
   const uploadFileToBucket = async (base64: string, name: string) => {
     // implementation here
-  }
+  };
 
   useEffect(() => {
     if (editorDevContainerRef.current !== null) {
-      const editor = grapesJS.init({
+      const editor: any = grapesJS.init({
         container: editorDevContainerRef.current,
-        plugins: [grapesJSMJML],
+        plugins: [grapesJSMJML, TypePlugin],
         blockManager: {
           blocks: [
             {
-              id: 'button',
-              label: 'Button',
-              category: 'MJML',
+              id: "button",
+              label: "Button",
+              category: "MJML",
               activate: true,
-              content: { type: 'mj-button' }
-            }
-          ]
+              content: { type: "mj-button" },
+            },
+          ],
         },
-        panels: {
-          panelManager: {
-            appendTo: '#custompanel'
-          }
-        },
+        panels: {},
         styleManager: {
           sectors: [
             {
-              name: 'General',
+              name: "General",
               buildProps: [
-                'float',
-                'display',
-                'position',
-                'top',
-                'right',
-                'left',
-                'bottom'
+                "float",
+                "display",
+                "position",
+                "top",
+                "right",
+                "left",
+                "bottom",
               ],
               properties: [
                 // properties here
-              ]
-            }
-          ]
+              ],
+            },
+          ],
         },
         storageManager: false,
         assetManager: {
-          uploadFile: async (e) => {
+          uploadFile: async (e: Event) => {
             // implementation here
           },
-          assets: []
-        }
-      })
-
+          assets: [],
+        },
+      });
 
       const updateAssets = async () => {
         try {
-          const response = await getEmailTemplateAssetsUrlFromBucket()
+          const response: any = await getEmailTemplateAssetsUrlFromBucket();
           if (response.status === 200) {
-            response.urls.forEach((url) => {
-              editor?.AssetManager?.add(url)
-            })
+            response.urls.forEach((url: any) => {
+              editor?.AssetManager?.add(url);
+            });
           }
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
-      }
-      updateAssets()
+      };
+      updateAssets();
 
       editor.setComponents(`
             <mjml>
               <mj-body>
               </mj-body>
-            </mjml>`)
+            </mjml>`);
 
-      const panelManager = editor.Panels
-      const blockManager = editor.BlockManager
+      const panelManager = editor.Panels;
+      const blockManager = editor.BlockManager;
 
-      blockManager.add('unsubscribe-link', {
-        label: 'Unsubscribe',
+      blockManager.add("unsubscribe-link", {
+        label: "Unsubscribe",
         content: ` <mj-section>
           <mj-column>
             <mj-text align="center">
@@ -104,29 +100,29 @@ const Editor: React.FC<Props> = ({ children }) => {
             </mj-text>
           </mj-column>
         </mj-section>`,
-        category: 'section',
+        category: "section",
         attributes: {
-          class: 'fa fa-ban',
+          class: "fa fa-ban",
           // style: 'font-size:34px; padding:0px',
-        }
-      })
+        },
+      });
 
       // more code here
     }
-  }, [editorDevContainerRef])
+  }, [editorDevContainerRef]);
 
   const exportHtml = () => {
     if (editor) {
-      editor.runCommand('exportHTML')
+      editor.runCommand("exportHTML");
     }
-  }
+  };
 
   return (
     <div ref={editorDevContainerRef}>
       <h2>{children}</h2>
       <button onClick={exportHtml}>Export HTML</button>
     </div>
-  )
-}
+  );
+};
 
-export default Editor
+export default Editor;
