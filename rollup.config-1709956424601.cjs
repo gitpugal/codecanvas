@@ -1,18 +1,23 @@
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
-import dts from "rollup-plugin-dts";
-import json from '@rollup/plugin-json';
-import terser from "@rollup/plugin-terser";
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import scss from "rollup-plugin-scss";
-import postcss from 'rollup-plugin-postcss';
-import cssnano from 'cssnano';  // Import cssnano for minification
-import copy from 'rollup-plugin-copy';
-import CleanCSS from "clean-css";
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var resolve = require('@rollup/plugin-node-resolve');
+var commonjs = require('@rollup/plugin-commonjs');
+var typescript = require('@rollup/plugin-typescript');
+var dts = require('rollup-plugin-dts');
+var json = require('@rollup/plugin-json');
+var terser = require('@rollup/plugin-terser');
+var peerDepsExternal = require('rollup-plugin-peer-deps-external');
+var scss = require('rollup-plugin-scss');
+var postcss = require('rollup-plugin-postcss');
+var cssnano = require('cssnano');
+var copy = require('rollup-plugin-copy');
+var CleanCSS = require('clean-css');
+
 const packageJson = require("./package.json");
 
-export default [
+var rollup_config = [
   {
     input: "src/index.ts",
     output: [
@@ -67,3 +72,5 @@ export default [
     plugins: [dts.default()],
   },
 ];
+
+exports.default = rollup_config;

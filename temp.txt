@@ -1,0 +1,67 @@
+{
+    "name": "html-design-editor",
+    "version": "0.0.1",
+    "description": "HTML Design editor",
+    "main": "dist/cjs/index.js",
+    "files": [
+      "dist"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+      "rollup": "rollup -c --bundleConfigAsCjs"
+    },
+    "author": "hp",
+    "license": "MIT",
+    "keywords": [
+      "tutorial",
+      "button",
+      "test"
+    ],
+    "devDependencies": {
+      "@rollup/plugin-commonjs": "^25.0.7",
+      "@rollup/plugin-json": "^6.1.0",
+      "@rollup/plugin-node-resolve": "^15.2.3",
+      "@rollup/plugin-terser": "^0.4.4",
+      "@rollup/plugin-typescript": "^11.1.6",
+      "@types/dom-to-image": "^2.6.7",
+      "@types/react": "^18.2.55",
+      "clean-css": "^5.3.3",
+      "cssnano": "^6.0.5",
+      "dom-to-image": "^2.6.0",
+      "grapesjs": "^0.21.7",
+      "grapesjs-mjml": "^1.0.5",
+      "react": "^18.2.0",
+      "rollup": "^4.10.0",
+      "rollup-plugin-copy": "^3.5.0",
+      "rollup-plugin-dts": "^6.1.0",
+      "rollup-plugin-peer-deps-external": "^2.2.4",
+      "rollup-plugin-postcss": "^4.0.2",
+      "rollup-plugin-scss": "^4.0.0",
+      "rollup-plugin-terser": "^7.0.2",
+      "sass": "^1.71.1",
+      "tslib": "^2.6.2",
+      "typescript": "^5.3.3",
+      "uglify-js": "^3.17.4"
+    },
+    "private": true,
+    "peerDependencies": {
+      "react": "^18.0.0"
+    },
+    "dependencies": {
+      "axios": "^1.6.7",
+      "dependency-cruiser": "^16.2.1",
+      "grapesjs-blocks-basic": "^1.0.2",
+      "grapesjs-component-countdown": "^1.0.2",
+      "grapesjs-custom-code": "^1.0.2",
+      "grapesjs-plugin-export": "^1.0.12",
+      "grapesjs-plugin-forms": "^2.0.6",
+      "grapesjs-preset-newsletter": "^1.0.2",
+      "grapesjs-preset-webpage": "^1.0.3",
+      "grapesjs-tabs": "^1.0.6",
+      "grapesjs-tooltip": "^0.1.8",
+      "grapesjs-touch": "^0.1.1",
+      "grapesjs-tui-image-editor": "^1.0.2",
+      "grapesjs-typed": "^2.0.1",
+      "react-icons": "^5.0.1"
+    }
+  

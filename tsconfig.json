@@ -10,10 +10,11 @@
     "jsx": "react",
     "declaration": true,
     "declarationDir": "types",
-    "sourceMap": true,
     "outDir": "dist",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "sourceMap": true,
+    "inlineSources": true,
   }
 }
