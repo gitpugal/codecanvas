@@ -1,5 +1,5 @@
 {
-  "name": "@pugalarasan/html-design-editor",
+  "name": "@gitpugal/codecanvas",
   "version": "0.0.1",
   "description": "HTML Design editor",
   "main": "dist/cjs/index.js",
@@ -67,11 +67,8 @@
     "react-icons": "^5.0.1"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/pugalarasan_git/codecanvas.git"
+    "url": "git://github.com/gitpugal/codecanvas.git"
   },
-  "bugs": {
-    "url": "https://gitlab.com/pugalarasan_git/codecanvas/issues"
-  },
-  "homepage": "https://gitlab.com/pugalarasan_git/codecanvas#readme"
+  
+  "homepage": "https://github.com/gitpugal/codecanvas"
 }
