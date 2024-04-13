@@ -3,7 +3,7 @@ name: html-design-editor
 on: 
   push: 
       branches: 
-        - master
+        - main
 
 jobs: 
   publish-gpr:
