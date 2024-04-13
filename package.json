@@ -6,6 +6,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "types": "dist/index.d.ts",
   "scripts": {
     "rollup": "rollup -c --bundleConfigAsCjs"
@@ -43,7 +46,6 @@
     "typescript": "^5.3.3",
     "uglify-js": "^3.17.4"
   },
-  "private": true,
   "peerDependencies": {
     "react": "^18.0.0"
   },
