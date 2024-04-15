@@ -10,7 +10,7 @@ You can install html-editor-react via npm:
 npm install html-editor-react --force
 ```
 
-## Usage
+## Usag
 
 Once installed, you can import the ReactEditor component and use it in your React application:
 
