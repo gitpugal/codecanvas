@@ -2,7 +2,7 @@
 
 html-editor-react is an npm package that provides a versatile HTML design editor component called PixelEditor. This editor allows users to create and modify HTML designs with ease.
 
-## Installation...
+## Installation
 
 You can install html-editor-react via npm:
 
