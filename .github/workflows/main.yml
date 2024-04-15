@@ -1,4 +1,4 @@
-name: html-design-editor
+name: codecanvaseditor
 
 on: 
   push: 
@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://npm.pkg.github.com/'
+          scope: '@gitpugal'
       - run: npm install --force
       - run: npm run rollup
       - run: npm publish
