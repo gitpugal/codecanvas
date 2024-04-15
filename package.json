@@ -1,6 +1,6 @@
 {
-  "name": "@gitpugal/codecanvas",
-  "version": "0.0.5",
+  "name": "html-design-editorr",
+  "version": "0.0.1",
   "description": "HTML Design editor",
   "main": "dist/cjs/index.js",
   "files": [
@@ -65,10 +65,5 @@
     "grapesjs-tui-image-editor": "^1.0.2",
     "grapesjs-typed": "^2.0.1",
     "react-icons": "^5.0.1"
-  },
-  "repository": {
-    "url": "git://github.com/gitpugal/codecanvas.git"
-  },
-  
-  "homepage": "https://github.com/gitpugal/codecanvas"
+  }
 }
