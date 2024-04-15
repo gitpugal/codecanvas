@@ -3529,7 +3529,10 @@ span.CodeMirror-selectedtext {
 
 .gjs-block:hover {
   color: #009bff !important;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important; /* Add box shadow */
+  border: 1px solid #009bff !important; /* Add grey border */
 }
+
 
 .gjs-sm-properties {
   padding-top: 20px !important;

@@ -117,10 +117,10 @@ const Editor = forwardRef((props: any, ref: any) => {
   useEffect(() => {
     const initEditor = async () => {
       if (editorContainerRef.current !== null) {
-        const data = await verify();
-        console.log(data);
-        if (data && data.authenticated == true) {
-          setUserData(data?.project);
+        // const data = await verify();
+        // console.log(data);
+        if (true) {
+          // setUserData(data?.project);
           const editor: any = grapesJS.init({
             container: editorContainerRef.current,
             plugins: [
@@ -788,6 +788,18 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
             {
               customIcon: ``,
+              name: "grid-items",
+              category: "Component",
+              code: "T7",
+            },
+            {
+              customIcon: ``,
+              name: "list-items",
+              category: "Component",
+              code: "T2",
+            },
+            {
+              customIcon: ``,
               name: "countdown",
               category: "Component",
               code: "T3",
@@ -811,18 +823,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Component",
               code: "T6",
             },
-            {
-              customIcon: ``,
-              name: "grid-items",
-              category: "Component",
-              code: "T7",
-            },
-            {
-              customIcon: ``,
-              name: "list-items",
-              category: "Component",
-              code: "T2",
-            },
+         
             {
               customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>`,
               name: "list",
@@ -898,17 +899,23 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           ];
 
-          const AllowedBlocks = blocksWithCategory.filter(
-            (block) =>
-              data?.project?.features?.tools?.includes(block.code) ||
-              data?.project?.features?.blocks?.includes(block.code)
-          );
+          // const AllowedBlocks = blocksWithCategory.filter(
+          //   (block) =>
+          //     data?.project?.features?.tools?.includes(block.code) ||
+          //     data?.project?.features?.blocks?.includes(block.code)
+          // );
 
           const bm = editor.BlockManager;
           editor.on("load", () => {
             editor.BlockManager.render(
-              AllowedBlocks.map((block) => {
+              blocksWithCategory.map((block) => {
                 if (bm.get(block.name)) {
+                  if (block.name == "list-items") {
+                    bm.get(block.name).set("label", "Cards Column");
+                  }
+                  if (block.name == "grid-items") {
+                    bm.get(block.name).set("label", "Cards Rows");
+                  }
                   if (block.customIcon.length > 0) {
                     bm.get(block.name).set("media", block.customIcon);
                   }
@@ -976,68 +983,31 @@ const Editor = forwardRef((props: any, ref: any) => {
     initEditor();
   }, [editorContainerRef]);
 
-  useEffect(() => {
-    const alertUser = (e: Event) => {
-      e.preventDefault();
-      fetch("https://backend.editor.leadsx10.io/api/auth/exit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          domain: window.location.hostname,
-          api_key: props.apiKey,
-        }),
-      });
-    };
+  // useEffect(() => {
+  //   const alertUser = (e: Event) => {
+  //     e.preventDefault();
+  //     fetch("https://backend.editor.leadsx10.io/api/auth/exit", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         domain: window.location.hostname,
+  //         api_key: props.apiKey,
+  //       }),
+  //     });
+  //   };
 
-    window.addEventListener("beforeunload", alertUser, { capture: true });
+  //   window.addEventListener("beforeunload", alertUser, { capture: true });
 
-    return () => {
-      window.removeEventListener("beforeunload", alertUser, { capture: true });
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", alertUser, { capture: true });
+  //   };
+  // }, []);
 
   return (
     <div style={{ height: "100vh", width: "100vw", overflow: "hidden" }}>
-      {!errMessage ? (
-        <>
-          {!isEditorLoaded && (
-            <div
-              style={{
-                width: "100vw",
-                height: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <LuLoader2 size={50} color="#009bff" className="animate-spin" />
-            </div>
-          )}
-          <div
-            style={{
-              overflow: "hidden",
-              position: "relative",
-              paddingTop: "3.125rem",
-              width: "100%",
-              zIndex: "40",
-              paddingLeft: "3.125rem",
-              paddingRight: "3.125rem",
-              height: "calc(90vh - 3.125rem)",
-            }}
-          >
-            <div id="custompanel"></div>
-            <div
-              ref={elementRef}
-              dangerouslySetInnerHTML={{
-                __html: templateHtml,
-              }}
-            />
-            <div ref={editorContainerRef} id="gjs"></div>
-          </div>
-        </>
-      ) : (
+      {!isEditorLoaded && (
         <div
           style={{
             width: "100vw",
@@ -1047,18 +1017,30 @@ const Editor = forwardRef((props: any, ref: any) => {
             justifyContent: "center",
           }}
         >
-          <h2
-            style={{
-              fontSize: "2.5rem",
-              fontWeight: "600",
-              backgroundColor: "#fff",
-              color: "#000",
-            }}
-          >
-            {errMessage}
-          </h2>
+          <LuLoader2 size={50} color="#009bff" className="animate-spin" />
         </div>
       )}
+      <div
+        style={{
+          overflow: "hidden",
+          position: "relative",
+          paddingTop: "3.125rem",
+          width: "100%",
+          zIndex: "40",
+          paddingLeft: "3.125rem",
+          paddingRight: "3.125rem",
+          height: "calc(90vh - 3.125rem)",
+        }}
+      >
+        <div id="custompanel"></div>
+        <div
+          ref={elementRef}
+          dangerouslySetInnerHTML={{
+            __html: templateHtml,
+          }}
+        />
+        <div ref={editorContainerRef} id="gjs"></div>
+      </div>
     </div>
   );
 });
