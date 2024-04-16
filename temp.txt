@@ -1,5 +1,5 @@
 # @gitpugal:registry=https://npm.pkg.github.com/
-# //npm.pkg.github.com/:_authToken=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
+# //npm.pkg.github.com/:_authToken=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
 
 
 

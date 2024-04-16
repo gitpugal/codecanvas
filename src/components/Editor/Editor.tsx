@@ -33,6 +33,15 @@ const Editor = forwardRef((props: any, ref: any) => {
     </head>
     ${html}
     </html>`;
+    fetch("https://backend.editor.leadsx10.io/api/auth/html-exports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        api_key: props.apiKey,
+      }),
+    });
     return result;
   };
 
@@ -117,10 +126,10 @@ const Editor = forwardRef((props: any, ref: any) => {
   useEffect(() => {
     const initEditor = async () => {
       if (editorContainerRef.current !== null) {
-        // const data = await verify();
-        // console.log(data);
-        if (true) {
-          // setUserData(data?.project);
+        const data = await verify();
+        console.log(data);
+        if (data && data.authenticated == true) {
+          setUserData(data?.project);
           const editor: any = grapesJS.init({
             container: editorContainerRef.current,
             plugins: [
@@ -657,7 +666,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               {
                 id: "redo",
                 label: '<i class="fa fa-repeat"></i>',
-                command: "exportHTML",
+                command: "redo",
                 attributes: { title: "redo" },
               },
               {
@@ -679,6 +688,12 @@ const Editor = forwardRef((props: any, ref: any) => {
           }
 
           const blocksWithCategory = [
+            {
+              customIcon: ``,
+              name: "list-items",
+              category: "Component",
+              code: "T2",
+            },
             {
               customIcon: ``,
               name: "button",
@@ -792,12 +807,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Component",
               code: "T7",
             },
-            {
-              customIcon: ``,
-              name: "list-items",
-              category: "Component",
-              code: "T2",
-            },
+
             {
               customIcon: ``,
               name: "countdown",
@@ -823,7 +833,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Component",
               code: "T6",
             },
-         
+
             {
               customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>`,
               name: "list",
@@ -899,22 +909,22 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           ];
 
-          // const AllowedBlocks = blocksWithCategory.filter(
-          //   (block) =>
-          //     data?.project?.features?.tools?.includes(block.code) ||
-          //     data?.project?.features?.blocks?.includes(block.code)
-          // );
+          const AllowedBlocks = blocksWithCategory.filter(
+            (block) =>
+              data?.project?.features?.tools?.includes(block.code) ||
+              data?.project?.features?.blocks?.includes(block.code)
+          );
 
           const bm = editor.BlockManager;
           editor.on("load", () => {
             editor.BlockManager.render(
-              blocksWithCategory.map((block) => {
+              AllowedBlocks.map((block) => {
                 if (bm.get(block.name)) {
                   if (block.name == "list-items") {
-                    bm.get(block.name).set("label", "Cards Column");
+                    bm.get(block.name).set("label", "Articles");
                   }
                   if (block.name == "grid-items") {
-                    bm.get(block.name).set("label", "Cards Rows");
+                    bm.get(block.name).set("label", "Cards");
                   }
                   if (block.customIcon.length > 0) {
                     bm.get(block.name).set("media", block.customIcon);
@@ -983,27 +993,27 @@ const Editor = forwardRef((props: any, ref: any) => {
     initEditor();
   }, [editorContainerRef]);
 
-  // useEffect(() => {
-  //   const alertUser = (e: Event) => {
-  //     e.preventDefault();
-  //     fetch("https://backend.editor.leadsx10.io/api/auth/exit", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         domain: window.location.hostname,
-  //         api_key: props.apiKey,
-  //       }),
-  //     });
-  //   };
+  useEffect(() => {
+    const alertUser = (e: Event) => {
+      e.preventDefault();
+      fetch("https://backend.editor.leadsx10.io/api/auth/exit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          domain: window.location.hostname,
+          api_key: props.apiKey,
+        }),
+      });
+    };
 
-  //   window.addEventListener("beforeunload", alertUser, { capture: true });
+    window.addEventListener("beforeunload", alertUser, { capture: true });
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", alertUser, { capture: true });
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser, { capture: true });
+    };
+  }, []);
 
   return (
     <div style={{ height: "100vh", width: "100vw", overflow: "hidden" }}>
@@ -1024,12 +1034,13 @@ const Editor = forwardRef((props: any, ref: any) => {
         style={{
           overflow: "hidden",
           position: "relative",
-          paddingTop: "3.125rem",
+          paddingTop: "1.565rem",
+          paddingBottom: "1.565rem",
           width: "100%",
           zIndex: "40",
           paddingLeft: "3.125rem",
           paddingRight: "3.125rem",
-          height: "calc(90vh - 3.125rem)",
+          height: props.minHeight ? props.minHeight : "80vh",
         }}
       >
         <div id="custompanel"></div>
