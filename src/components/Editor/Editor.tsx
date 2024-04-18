@@ -305,7 +305,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             content: `<div class="gjs-hero">
           <h2 class="gjs-hero-h2">Your Title</h2>
         </div>`,
-            category: "section",
+            category: "Component",
             attributes: { class: "fa fa-box" },
           });
 
@@ -1040,7 +1040,7 @@ const Editor = forwardRef((props: any, ref: any) => {
   }, []);
 
   return (
-    <div style={{ height: "100vh", width: "100vw", overflow: "hidden" }}>
+    <div style={{ height: "100%", width: "100%", overflow: "hidden" }}>
       {!isEditorLoaded && (
         <div
           style={{

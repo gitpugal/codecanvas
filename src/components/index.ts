@@ -1,1 +1,1 @@
-export {default as ReactEditor} from "./Editor"
+export {default as LeadsX10Editor} from "./Editor"

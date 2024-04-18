@@ -3805,6 +3805,8 @@ span.CodeMirror-selectedtext {
   border-radius: 5px;
   overflow: hidden;
   height: 100% !important;
+  width: 100% !important;
+
 }
 
 .gjs-field-color-picker {
