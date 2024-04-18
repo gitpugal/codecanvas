@@ -1013,6 +1013,16 @@ const Editor = forwardRef((props: any, ref: any) => {
           editor.runCommand("sw-visibility");
           document?.getElementById("blocks-button")?.click();
           setEditor(editor);
+          const customPanel = document.getElementById("custompanel");
+          if (customPanel && customPanel.children.length == 8) {
+            const firstFourChildren = Array.from(customPanel.children).slice(
+              0,
+              4
+            );
+            firstFourChildren.forEach((child) => {
+              customPanel.removeChild(child);
+            });
+          }
         }
       } else {
         return <div>Not Autheticated</div>;
@@ -1046,11 +1056,33 @@ const Editor = forwardRef((props: any, ref: any) => {
 
   return (
     <div style={{ height: "100%", width: "100%", overflow: "hidden" }}>
+      {errMessage && (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "600",
+              backgroundColor: "#fff",
+              color: "#000",
+            }}
+          >
+            {errMessage}
+          </h2>
+        </div>
+      )}
       {!isEditorLoaded && (
         <div
           style={{
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -1065,6 +1097,7 @@ const Editor = forwardRef((props: any, ref: any) => {
           position: "relative",
           paddingTop: "1.565rem",
           paddingBottom: "1.565rem",
+
           width: "100%",
           zIndex: "40",
           paddingLeft: "3.125rem",
@@ -1101,6 +1134,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             </p>
           </div>
         )}
+
         <div
           ref={elementRef}
           dangerouslySetInnerHTML={{
