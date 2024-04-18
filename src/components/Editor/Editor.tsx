@@ -1014,11 +1014,10 @@ const Editor = forwardRef((props: any, ref: any) => {
           document?.getElementById("blocks-button")?.click();
           setEditor(editor);
           const customPanel = document.getElementById("custompanel");
-          console.log(customPanel?.children)
-          if (customPanel && customPanel.children.length == 8) {
+          if (customPanel && customPanel.children.length == 4) {
             const firstFourChildren = Array.from(customPanel.children).slice(
               0,
-              4
+              2
             );
             firstFourChildren.forEach((child) => {
               customPanel.removeChild(child);
@@ -1106,7 +1105,12 @@ const Editor = forwardRef((props: any, ref: any) => {
           height: props.minHeight ? props.minHeight : "80vh",
         }}
       >
-        <div id="custompanel"></div>
+        <div
+          style={{
+            visibility: isEditorLoaded ? "visible" : "hidden",
+          }}
+          id="custompanel"
+        ></div>
         {userData && (
           <div
             style={{
