@@ -1098,9 +1098,9 @@ const Editor = forwardRef((props: any, ref: any) => {
           paddingTop: "1.565rem",
           paddingBottom: "1.565rem",
 
-          width: "100%",
+          width: "95%",
           zIndex: "40",
-          paddingLeft: "3.125rem",
+          paddingLeft: "2.5rem",
           paddingRight: "3.125rem",
           height: props.minHeight ? props.minHeight : "80vh",
         }}
