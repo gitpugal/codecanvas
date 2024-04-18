@@ -651,46 +651,51 @@ const Editor = forwardRef((props: any, ref: any) => {
 
           console.log(panelManager.getPanels());
 
-          panelManager.addPanel({
-            id: "devices",
-            appendTo: "#custompanel",
+          if (!panelManager.getPanel("db")) {
+            panelManager.addPanel({
+              id: "db",
+              appendTo: "#custompanel",
 
-            buttons: [
-              {
-                id: "device-desktop",
-                label: '<i class="fa fa-television cus"></i>',
-                command: "set-device-tablet",
-                togglable: true,
-                active: true,
-              },
+              buttons: [
+                {
+                  id: "redo",
+                  label: '<i class="fa fa-repeat"></i>',
+                  command: "redo",
+                  attributes: { title: "redo" },
+                },
+                {
+                  id: "undo",
+                  label: '<i class="fa fa-undo"></i>',
+                  command: "undo",
+                  attributes: { title: "undo" },
+                },
+              ],
+            });
+          }
+          if (!panelManager.getPanel("devices")) {
+            panelManager.addPanel({
+              id: "devices",
+              appendTo: "#custompanel",
 
-              {
-                id: "device-mobile",
-                label: '<i class="fa fa-mobile"></i>',
-                command: "set-device-mobile",
-                togglable: true,
-              },
-            ],
-          });
-          panelManager.addPanel({
-            id: "db",
-            appendTo: "#custompanel",
+              buttons: [
+                {
+                  id: "device-desktop",
+                  label: '<i class="fa fa-television cus"></i>',
+                  command: "set-device-tablet",
+                  togglable: true,
+                  active: true,
+                },
 
-            buttons: [
-              {
-                id: "redo",
-                label: '<i class="fa fa-repeat"></i>',
-                command: "redo",
-                attributes: { title: "redo" },
-              },
-              {
-                id: "undo",
-                label: '<i class="fa fa-undo"></i>',
-                command: "undo",
-                attributes: { title: "undo" },
-              },
-            ],
-          });
+                {
+                  id: "device-mobile",
+                  label: '<i class="fa fa-mobile"></i>',
+                  command: "set-device-mobile",
+                  togglable: true,
+                },
+              ],
+            });
+          }
+
           panelManager.removePanel("command");
           panelManager.removePanel("options");
           panelManager.removePanel("devices-c");
