@@ -3975,9 +3975,9 @@ span.CodeMirror-selectedtext {
   color: #67748f !important;
 }
 
-p {
+/* p {
   background-color: rgb(0, 128, 255) !important;
-}
+} */
 
 .gjs-two-bg {
   background-color: transparent !important;

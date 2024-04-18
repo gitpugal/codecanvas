@@ -925,8 +925,8 @@ const Editor = forwardRef((props: any, ref: any) => {
 
           const AllowedBlocks = blocksWithCategory.filter(
             (block) =>
-              data?.project?.features?.tools?.includes(block.code) ||
-              data?.project?.features?.blocks?.includes(block.code)
+              data?.user?.features?.tools?.includes(block.code) ||
+              data?.user?.features?.blocks?.includes(block.code)
           );
 
           const bm = editor.BlockManager;
