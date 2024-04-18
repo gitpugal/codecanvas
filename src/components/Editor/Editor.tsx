@@ -953,9 +953,9 @@ const Editor = forwardRef((props: any, ref: any) => {
             editor.on("component:add", (comp: any) => {
               if (
                 comp.attributes.tagName == "img" &&
-                !data?.project?.storage?.access_key_id
+                !data?.user?.storage?.access_key_id
               ) {
-                console.log(data.project);
+                // console.log(data.project);
                 comp.remove();
                 alert("S3 Bucket Not Configured!");
               }
