@@ -129,7 +129,7 @@ const Editor = forwardRef((props: any, ref: any) => {
         const data = await verify();
         console.log(data);
         if (data && data.authenticated == true) {
-          setUserData(data?.project);
+          setUserData(data?.user);
           const editor: any = grapesJS.init({
             container: editorContainerRef.current,
             plugins: [
@@ -190,27 +190,41 @@ const Editor = forwardRef((props: any, ref: any) => {
                 const file = e.dataTransfer
                   ? e.dataTransfer.files[0]
                   : e.target.files[0];
+                const maxFileSize = 2 * 1024 * 1024; // 2 MB
+                if (
+                  (data?.user?.plan?.name == "free" ||
+                    data?.user?.plan?.name == "Free") &&
+                  file &&
+                  file?.size > maxFileSize
+                ) {
+                  alert(
+                    "File size exceeds the maximum limit (2MB). Please choose a smaller file."
+                  );
+                  return;
+                }
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                   const dataURL: any = e?.target?.result;
                   console.log("Data URL:", dataURL);
-                  const base64Image = file?.data[0]?.src?.split(",")[1];
+                  const base64Data = dataURL?.split(",")[1];
+                  const jsonBlob = new Blob([JSON.stringify(base64Data)], {
+                    type: "application/json",
+                  });
+                  let formData = new FormData();
                   const name = file?.name
                     ?.replace(/\.[^.]+$/, "")
                     .replace(" ", "_");
-                  const res = await fetch("http:localhost:5000/postTemplate", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      n: dataURL?.split(",")[1],
-                      name: name,
-                      domain: window.location.hostname,
-                      projectId: "projectId",
-                    }),
-                  });
-                  if (res && res?.ok) {
+                  formData.append("file", jsonBlob);
+                  formData.append("name", name);
+                  formData.append("api_key", data?.user?.api_key);
+                  const res = await fetch(
+                    "https://backend.editor.leadsx10.io/api/bucket/upload",
+                    {
+                      method: "POST",
+                      body: formData,
+                    }
+                  );
+                  if (res && res?.status == 200) {
                     const data = await res.json();
                     editor?.AssetManager?.add(data.url);
                   } else {
@@ -218,7 +232,7 @@ const Editor = forwardRef((props: any, ref: any) => {
                   }
 
                   // uploadFile(dataURL.split(",")[1], name + ".jpeg").then(
-                  //   (res: any) => {
+                  //   (res) => {
                   //     console.log(res);
                   //     editor?.AssetManager?.add(res);
                   //   }
@@ -226,7 +240,7 @@ const Editor = forwardRef((props: any, ref: any) => {
                 };
                 reader.readAsDataURL(file);
               },
-              assets: [],
+              assets: data?.images ? data?.images : [],
             },
           });
 
@@ -1054,6 +1068,34 @@ const Editor = forwardRef((props: any, ref: any) => {
         }}
       >
         <div id="custompanel"></div>
+        {userData && (
+          <div
+            style={{
+              position: "absolute",
+              right: "3.125rem",
+              bottom: "1.8rem",
+              width: "28%",
+              height: "70px",
+              backgroundColor: "white",
+              zIndex: 100,
+              display: "flex",
+              justifyItems: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              // borderTop: "3px solid #009bff",
+            }}
+            id="leadsx10label"
+          >
+            <p
+              style={{
+                fontWeight: "bolder",
+                color: "#009bff",
+              }}
+            >
+              by LeadsX10 Editor
+            </p>
+          </div>
+        )}
         <div
           ref={elementRef}
           dangerouslySetInnerHTML={{
