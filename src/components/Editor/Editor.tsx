@@ -1014,6 +1014,7 @@ const Editor = forwardRef((props: any, ref: any) => {
           document?.getElementById("blocks-button")?.click();
           setEditor(editor);
           const customPanel = document.getElementById("custompanel");
+          console.log(customPanel?.children)
           if (customPanel && customPanel.children.length == 8) {
             const firstFourChildren = Array.from(customPanel.children).slice(
               0,
