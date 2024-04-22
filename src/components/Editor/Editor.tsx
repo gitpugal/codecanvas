@@ -92,7 +92,7 @@ const Editor = forwardRef((props: any, ref: any) => {
 
   const verify = async () => {
     try {
-      setIsEditorLoaded(true);
+      // setIsEditorLoaded(true);
       const res = await fetch(
         "https://backend.editor.leadsx10.io/api/auth/init",
         {
@@ -114,7 +114,7 @@ const Editor = forwardRef((props: any, ref: any) => {
       }
       const data = await res.json();
       // setAuthData(data);
-      setIsEditorLoaded(false);
+      // setIsEditorLoaded(false);
       console.log(data);
       return data;
     } catch (e) {
@@ -430,58 +430,6 @@ const Editor = forwardRef((props: any, ref: any) => {
             padding: "10px",
             width: "100%",
           });
-
-          // blockManager.add("social-elements", {
-          //   label: "Socials",
-          //   content: `
-          //  <mj-raw>
-          //   <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-          //   <img
-          //   width="30px" style="margin: 5px 5px;"
-          //   href="/"
-          //   src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/whatsapp.png"
-          //   >
-          //   </a>
-          //   <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-          //   <img
-          //   width="30px" style="margin: 5px 5px;"
-          //   href="/"
-          //   src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/linkedin.png"
-          //   >
-          //   </a> <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-          //   <img
-          //   width="30px" style="margin: 5px 5px;"
-          //   href="/"
-          //   src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/youtube.png"
-          //   >
-          //   </a>
-          //    <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-          //   <img
-          //   width="30px" style="margin: 5px 5px;"
-          //   href="/"
-          //   src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/instagram.png"
-          //   >
-          //   </a>
-          //   <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-          //   <img
-          //   width="30px" style="margin: 5px 5px;"
-          //   href="/"
-          //   src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/twitter.png"
-          //   >
-          //   </a>   <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-          //   <img
-          //   width="30px" style="margin: 5px 5px;"
-          //   href="/"
-          //   src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/facebook.png"
-          //   >
-          //   </a>
-          //   </mj-raw>
-          //   `,
-          //   category: "section",
-          //   attributes: {
-          //     class: "fa fa-share-alt-square social-custom-icon text-center",
-          //   },
-          // });
 
           panelManager.removeButton("views", "open-sm");
           panelManager.removeButton("views", "open-tm");
@@ -982,6 +930,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             }
             setIsEditorLoaded(true);
             props.onReady();
+
           });
           console.log(editor.StyleManager.getSectors());
           editor.StyleManager.removeProperty(
