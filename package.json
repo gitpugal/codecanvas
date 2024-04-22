@@ -1,6 +1,6 @@
 {
   "name": "@gitpugal/-design-editorr",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "HTML Design editor",
   "main": "dist/cjs/index.js",
   "files": [
