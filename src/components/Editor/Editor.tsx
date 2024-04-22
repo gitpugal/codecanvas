@@ -92,7 +92,7 @@ const Editor = forwardRef((props: any, ref: any) => {
 
   const verify = async () => {
     try {
-      setIsEditorLoaded(true);
+      // setIsEditorLoaded(true);
       const res = await fetch(
         "https://backend.editor.leadsx10.io/api/auth/init",
         {
@@ -109,13 +109,10 @@ const Editor = forwardRef((props: any, ref: any) => {
       if (res.status >= 400) {
         const data = await res.json();
         setErrMessage(data.message);
-        setIsEditorLoaded(false);
         return false;
       }
       const data = await res.json();
       // setAuthData(data);
-      setIsEditorLoaded(false);
-      console.log(data);
       return data;
     } catch (e) {
       console.log(e);
