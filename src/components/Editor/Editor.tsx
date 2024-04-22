@@ -92,7 +92,7 @@ const Editor = forwardRef((props: any, ref: any) => {
 
   const verify = async () => {
     try {
-      // setIsEditorLoaded(true);
+      setIsEditorLoaded(true);
       const res = await fetch(
         "https://backend.editor.leadsx10.io/api/auth/init",
         {
@@ -114,7 +114,7 @@ const Editor = forwardRef((props: any, ref: any) => {
       }
       const data = await res.json();
       // setAuthData(data);
-      // setIsEditorLoaded(false);
+      setIsEditorLoaded(false);
       console.log(data);
       return data;
     } catch (e) {
@@ -930,7 +930,6 @@ const Editor = forwardRef((props: any, ref: any) => {
             }
             setIsEditorLoaded(true);
             props.onReady();
-
           });
           console.log(editor.StyleManager.getSectors());
           editor.StyleManager.removeProperty(
@@ -1031,10 +1030,10 @@ const Editor = forwardRef((props: any, ref: any) => {
         <div
           style={{
             width: "100%",
-            height: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            height: props.minHeight ? "100%" : "80vh",
           }}
         >
           <LuLoader2 size={50} color="#009bff" className="animate-spin" />
@@ -1090,12 +1089,12 @@ const Editor = forwardRef((props: any, ref: any) => {
         )}
 
         <div
-          ref={elementRef}
-          dangerouslySetInnerHTML={{
-            __html: templateHtml,
+          style={{
+            visibility: isEditorLoaded ? "visible" : "hidden",
           }}
-        />
-        <div ref={editorContainerRef} id="gjs"></div>
+          ref={editorContainerRef}
+          id="gjs"
+        ></div>
       </div>
     </div>
   );
