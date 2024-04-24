@@ -3378,7 +3378,6 @@ span.CodeMirror-selectedtext {
   color: #fff;
 }
 
-
 html {
   font-family: sans-serif !important;
 }
@@ -3387,9 +3386,7 @@ html {
   height: auto;
   width: auto;
   background-color: rebeccapurple !important;
-
 }
-
 
 .gjs-am-assets-header {
   display: none;
@@ -3400,7 +3397,6 @@ html {
   position: fixed !important;
   top: 50% !important;
 }
-
 
 #custom-trait {
   position: absolute;
@@ -3414,7 +3410,7 @@ html {
   z-index: 1000;
 }
 
-#custompanel>.gjs-pn-panel {
+#custompanel > .gjs-pn-panel {
   background-color: rgb(59, 59, 59) !important;
 }
 
@@ -3422,7 +3418,7 @@ html {
   margin-bottom: 1.25rem;
   position: absolute;
   bottom: 1rem;
-  left: 7rem;
+  left: 4rem;
   z-index: 50;
   width: fit-content;
   display: flex;
@@ -3438,7 +3434,6 @@ html {
   overflow: hidden;
 }
 
-
 .social-custom-icon {
   font-size: 30px !important;
 }
@@ -3453,30 +3448,26 @@ html {
 
 @media (max-width: 1200px) {
   #custom-trait {
-      width: 25%;
-      right: 67px;
-      font-size: 12px;
+    width: 25%;
+    right: 67px;
+    font-size: 12px;
   }
 
   #linkNameInput {
-      width: 53%;
-      padding: 3px 5px;
-      margin-left: 5px;
+    width: 53%;
+    padding: 3px 5px;
+    margin-left: 5px;
   }
 }
 
 @keyframes spin {
   to {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 .animate-spin {
   animation: spin 1s linear infinite;
 }
-
-
-
-
 
 .gjs-title,
 .gjs-sm-sector-title {
@@ -3487,9 +3478,7 @@ html {
   font-weight: bolder;
   color: #67748f !important;
   border-bottom: 1px solid #eee !important;
-
 }
-
 
 .text-center {
   text-align: center;
@@ -3498,7 +3487,6 @@ html {
 .gjs-frame-wrapper {
   overflow: hidden;
 }
-
 
 .gjs-cv-canvas {
   overflow: auto;
@@ -3536,14 +3524,13 @@ html {
 
 .gjs-block-category .gjs-blocks-c,
 .gjs-sm-properties {
-  box-shadow: inset 0 3px 3px -2px rgba(0, 0, 0, .1) !important;
+  box-shadow: inset 0 3px 3px -2px rgba(0, 0, 0, 0.1) !important;
 }
 .gjs-block:hover {
   color: #009bff !important;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important;
-  border: 1px solid #009bff !important; 
+  border: 1px solid #009bff !important;
 }
-
 
 .gjs-sm-properties {
   padding-top: 20px !important;
@@ -3553,19 +3540,16 @@ html {
   color: white !important;
 }
 
-
-
 .gjs-clm-sels,
 .gjs-clm-label-sel,
 .gjs-clm-header-label,
 .gjs-label {
   color: #67748f !important;
-
 }
 
 @media (max-width: 1200px) {
   .gjs-blocks-c {
-      grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
@@ -3598,16 +3582,13 @@ html {
 
 .gjs-selected {
   outline: 3px solid #009bff !important;
-
 }
-
 
 .gjs-cv-canvas {
   height: 100%;
   background: gainsboro;
   top: 0 !important;
   width: 70%;
-
 }
 
 .gjs-pn-views .gjs-pn-buttons .gjs-pn-btn {
@@ -3629,7 +3610,6 @@ html {
   background-color: gray !important;
 }
 
-
 .gjs-pn-command,
 .gjs-pn-devices,
 .gjs-pn-db {
@@ -3642,8 +3622,6 @@ html {
 .gjs-pn-devices {
   border-right: 2px solid rgb(255, 255, 255, 0.2) !important;
 }
-
-
 
 .gjs-rte-actionbar {
   background-color: #eeeeee !important;
@@ -3670,38 +3648,38 @@ html {
   border-radius: 5px;
 }
 
-.gjs-rte-action>select {
+.gjs-rte-action > select {
   padding: 5px !important;
   border-radius: 7px;
 }
 
-
 .gjs-block {
   padding: 20px 10px !important;
   border-radius: 10px;
-  width: 100%  !important; 
+  width: 100% !important;
+  max-height: 110px;
+  min-height: 110px;
   background-color: white !important;
   border: 1px solid #fff !important;
-  box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent, 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);
-  font-family: "Inter" "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent,
+    0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  font-family: "Inter" "Segoe UI", Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
   padding-top: 5px;
   font-weight: 500;
   box-sizing: border-box !important;
 }
-
 
 .gjs-blocks-c {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(3, 1fr);
   background-color: #fafafa;
-  width: 100% !important; 
+  width: 100% !important;
   padding: 0px 20px !important;
   color: #67748f !important;
   box-sizing: border-box !important;
 }
-
-
 
 .gjs-block:hover {
   cursor: grab !important;
@@ -3710,7 +3688,6 @@ html {
 .gjs-pn-devices-c {
   display: none;
 }
-
 
 #customGridSVG {
   margin: auto auto;
@@ -3722,11 +3699,11 @@ html {
   margin: 0 auto;
 }
 
-
 .gjs-block-label {
   text-overflow: clip !important;
   white-space: normal !important;
-  font-family: "Inter", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  font-family: "Inter", "Segoe UI", Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
   padding-top: 5px;
   font-weight: 500;
 }
@@ -3760,7 +3737,6 @@ html {
   border-radius: 10px !important;
   width: 75% !important;
   cursor: pointer !important;
-
 }
 
 .gjs-sm-header,
@@ -3770,7 +3746,7 @@ html {
   margin-top: 60%;
 }
 
-.gjs-am-file-uploader>form,
+.gjs-am-file-uploader > form,
 .gjs-am-assets-cont {
   border-radius: 20px !important;
 }
@@ -3784,8 +3760,6 @@ html {
   display: none;
 }
 
-
-
 .gjs-mdl-btn-close {
   opacity: 1;
 }
@@ -3793,7 +3767,6 @@ html {
 .gjs-three-bg {
   background-color: #009bff !important;
   color: white !important;
-
 }
 
 #gjs {
@@ -3816,7 +3789,6 @@ html {
   border: none;
 }
 
-
 .aiModalCOntainer {
   background-color: rgb(229, 229, 229) !important;
   height: 50vh !important;
@@ -3826,8 +3798,6 @@ html {
   border-radius: 10px;
 }
 
-
-
 .innerBox {
   display: flex;
   align-items: stretch;
@@ -3835,7 +3805,6 @@ html {
   flex-direction: column;
   gap: 10px;
 }
-
 
 .aiModalCOntainer input,
 .aiModalCOntainer button,
@@ -3845,7 +3814,6 @@ html {
   border-radius: 10px;
   margin-right: 10px;
 }
-
 
 .gjs-editor-cont {
   border: 3px solid #eaeaea !important;
@@ -3886,13 +3854,11 @@ html {
 .gjs-sm-field select,
 .gjs-sm-field input {
   color: #67748f !important;
-
 }
 
 .gjs-sm-sectors {
   color: #4c5569 !important;
 }
-
 
 .gjs-radio-item-label {
   font-size: 10px !important;
@@ -3901,8 +3867,6 @@ html {
 .gjs-pn-panel .gjs-sm-sectors {
   background-color: #fafafa !important;
 }
-
-
 
 .gjs-sm-property {
   background-color: white !important;
@@ -3930,10 +3894,9 @@ html {
   z-index: 50;
   padding-top: 0px !important;
   color: #67748f !important;
-  background-color: #E9ECEF !important;
+  background-color: #e9ecef !important;
   border-left: 1px solid #eee !important;
   padding-bottom: 40px !important;
-
 }
 
 .gjs-sm-icon {
@@ -3955,17 +3918,13 @@ html {
   background: #edf0f5 !important;
 }
 
-
-
 .gjs-pn-panels {
   width: 0;
   display: flex;
   justify-content: space-evenly;
 }
 
-
-
-.gjs-pn-views>.gjs-pn-buttons>.gjs-pn-btn {
+.gjs-pn-views > .gjs-pn-buttons > .gjs-pn-btn {
   font-size: 15px !important;
   border: none !important;
   padding: 15px;
@@ -3977,27 +3936,22 @@ html {
   color: rgb(173, 173, 173) !important;
 }
 
-
-.gjs-pn-views>.gjs-pn-buttons>.gjs-pn-active {
+.gjs-pn-views > .gjs-pn-buttons > .gjs-pn-active {
   box-shadow: none !important;
   background-color: white !important;
   border-radius: 10px 10px 0px 0px;
   color: #009bff !important;
 }
 
-.gjs-pn-devices>.gjs-pn-buttons>.gjs-pn-btn,
-.gjs-pn-db>.gjs-pn-buttons>.gjs-pn-btn {
+.gjs-pn-devices > .gjs-pn-buttons > .gjs-pn-btn,
+.gjs-pn-db > .gjs-pn-buttons > .gjs-pn-btn {
   color: rgba(255, 255, 255, 0.808) !important;
 }
 
 .gjs-sm-composite {
   border-radius: 5px !important;
   border: 1px solid #eaeaea !important;
-
 }
-
-
-
 
 #trait-button,
 #sm-buttom,
@@ -4017,14 +3971,12 @@ html {
 .container {
   text-align: center !important;
   background-color: #0001fc !important;
-
 }
 
 .mj-raw {
   text-align: center !important;
   background-color: #0001fc !important;
 }
-
 
 .gjs-pn-commands {
   display: none;
@@ -4040,7 +3992,6 @@ html {
   color: #67748f !important;
 }
 
-
 .gjs-two-bg {
   background-color: transparent !important;
 }
@@ -4052,7 +4003,6 @@ html {
 .gjs-field-arrow-u {
   border-bottom: 4px solid #009bff;
 }
-
 
 .gjs-dashed {
   outline: 50px dashed rgba(170, 170, 170, 0.7) !important;
@@ -4066,4 +4016,18 @@ html {
 
 .gjs-one-bg {
   background-color: white !important;
+}
+
+@media (max-width: 1200) {
+  .gjs-block {
+    min-height: 110px;
+    max-height: 110px;
+  }
+}
+
+@media (max-width: 1000) {
+  .gjs-block {
+    min-height: 90px;
+    max-height: 90px;
+  }
 }

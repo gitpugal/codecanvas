@@ -1080,7 +1080,7 @@ const Editor = forwardRef((props: any, ref: any) => {
                 color: "#009bff",
               }}
             >
-              by LeadsX10 Editor
+              by LeadsX10
             </p>
           </div>
         )}
