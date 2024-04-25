@@ -902,10 +902,10 @@ const Editor = forwardRef((props: any, ref: any) => {
 
             editor.on("component:add", (comp: any) => {
               if (
-                comp.attributes.tagName == "img" &&
+                comp?.attributes?.attributes?.src ==
+                  `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+` &&
                 !data?.user?.storage?.access_key_id
               ) {
-                // console.log(data.project);
                 comp.remove();
                 alert("S3 Bucket Not Configured!");
               }
