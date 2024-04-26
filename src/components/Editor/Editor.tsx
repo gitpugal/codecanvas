@@ -672,23 +672,9 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Blocks",
               code: "B4",
             },
-            {
-              customIcon: ``,
-              name: "list-items",
-              category: "Tools",
-              code: "T2",
-            },
-            {
-              customIcon: ``,
-              name: "button",
-              category: "Tools",
-              code: "T1",
-            },
-            //customIcon: ``, { name: 'checkbox', category: 'Forms', id: '' },
             { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
             { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
             { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
-
             {
               customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <rect width="24" height="24" fill="white"/>
@@ -723,7 +709,6 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Blocks",
               code: "B6",
             },
-
             {
               customIcon: `<svg
             xmlns="http://www.w3.org/2000/svg"
@@ -768,6 +753,19 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
             {
               customIcon: ``,
+              name: "list-items",
+              category: "Tools",
+              code: "T2",
+            },
+            {
+              customIcon: ``,
+              name: "button",
+              category: "Tools",
+              code: "T1",
+            },
+
+            {
+              customIcon: ``,
               name: "grid-items",
               category: "Tools",
               code: "T7",
@@ -791,7 +789,6 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Tools",
               code: "T5",
             },
-            //customIcon: ``, { name: 'form', category: 'Forms', id: '' },
             {
               customIcon: ``,
               name: "image",
@@ -805,23 +802,18 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Tools",
               code: "T9",
             },
-            //customIcon: ``, { name: 'input', category: 'Forms', id: '' },
-            //customIcon: ``, { name: 'label', category: 'Forms', id: '' },
             {
               customIcon: ``,
               name: "link",
               category: "Tools",
               code: "T10",
             },
-            //customIcon: ``, { name: 'map', category: 'Component', id: '' },
             {
               customIcon: ``,
               name: "quote",
               category: "Tools",
               code: "T11",
             },
-            //customIcon: ``, { name: 'radio', category: 'Forms', id: '' },
-            //customIcon: ``, { name: 'select', category: 'Forms', id: '' },
             {
               customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>`,
               name: "social-elements",
@@ -853,7 +845,6 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Tools",
               code: "T16",
             },
-            //customIcon: ``, { name: 'textarea', category: 'Forms', id: '' },
             {
               customIcon: ``,
               name: "tooltip",
