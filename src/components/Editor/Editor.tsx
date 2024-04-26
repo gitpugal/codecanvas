@@ -302,7 +302,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             content: `<div class="gjs-hero">
           <h2 class="gjs-hero-h2">Your Title</h2>
         </div>`,
-            category: "Component",
+            category: "Tools",
             attributes: { class: "fa fa-box" },
           });
 
@@ -434,10 +434,10 @@ const Editor = forwardRef((props: any, ref: any) => {
           panelManager.removeButton("views", "open-blocks");
           panelManager.addButton("views", {
             id: "preview",
-            label: "Blocks",
+            label: "Components",
             command: "open-blocks",
             attributes: {
-              title: "Blocks",
+              title: "Components",
               id: "blocks-button",
               class: "tabButtons",
             },
@@ -653,22 +653,6 @@ const Editor = forwardRef((props: any, ref: any) => {
 
           const blocksWithCategory = [
             {
-              customIcon: ``,
-              name: "list-items",
-              category: "Component",
-              code: "T2",
-            },
-            {
-              customIcon: ``,
-              name: "button",
-              category: "Component",
-              code: "T1",
-            },
-            //customIcon: ``, { name: 'checkbox', category: 'Forms', id: '' },
-            { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
-            { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
-            { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
-            {
               customIcon: `  <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -688,6 +672,23 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Blocks",
               code: "B4",
             },
+            {
+              customIcon: ``,
+              name: "list-items",
+              category: "Tools",
+              code: "T2",
+            },
+            {
+              customIcon: ``,
+              name: "button",
+              category: "Tools",
+              code: "T1",
+            },
+            //customIcon: ``, { name: 'checkbox', category: 'Forms', id: '' },
+            { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
+            { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
+            { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
+
             {
               customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <rect width="24" height="24" fill="white"/>
@@ -768,40 +769,40 @@ const Editor = forwardRef((props: any, ref: any) => {
             {
               customIcon: ``,
               name: "grid-items",
-              category: "Component",
+              category: "Tools",
               code: "T7",
             },
 
             {
               customIcon: ``,
               name: "countdown",
-              category: "Component",
+              category: "Tools",
               code: "T3",
             },
             {
               customIcon: ``,
               name: "custom-code",
-              category: "Component",
+              category: "Tools",
               code: "T4",
             },
             {
               customIcon: ``,
               name: "divider",
-              category: "Component",
+              category: "Tools",
               code: "T5",
             },
             //customIcon: ``, { name: 'form', category: 'Forms', id: '' },
             {
               customIcon: ``,
               name: "image",
-              category: "Component",
+              category: "Tools",
               code: "T6",
             },
 
             {
               customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>`,
               name: "list",
-              category: "Component",
+              category: "Tools",
               code: "T9",
             },
             //customIcon: ``, { name: 'input', category: 'Forms', id: '' },
@@ -809,14 +810,14 @@ const Editor = forwardRef((props: any, ref: any) => {
             {
               customIcon: ``,
               name: "link",
-              category: "Component",
+              category: "Tools",
               code: "T10",
             },
             //customIcon: ``, { name: 'map', category: 'Component', id: '' },
             {
               customIcon: ``,
               name: "quote",
-              category: "Component",
+              category: "Tools",
               code: "T11",
             },
             //customIcon: ``, { name: 'radio', category: 'Forms', id: '' },
@@ -824,51 +825,51 @@ const Editor = forwardRef((props: any, ref: any) => {
             {
               customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>`,
               name: "social-elements",
-              category: "Component",
+              category: "Tools",
               code: "T12",
             },
             {
               customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-space"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-3" /></svg>`,
               name: "spacer",
-              category: "Component",
+              category: "Tools",
               code: "T13",
             },
 
             {
               customIcon: ``,
               name: "tabs",
-              category: "Component",
+              category: "Tools",
               code: "T14",
             },
             {
               customIcon: ``,
               name: "text",
-              category: "Component",
+              category: "Tools",
               code: "T15",
             },
             {
               customIcon: ``,
               name: "text-basic",
-              category: "Component",
+              category: "Tools",
               code: "T16",
             },
             //customIcon: ``, { name: 'textarea', category: 'Forms', id: '' },
             {
               customIcon: ``,
               name: "tooltip",
-              category: "Component",
+              category: "Tools",
               code: "T17",
             },
             {
               customIcon: ``,
               name: "typed",
-              category: "Component",
+              category: "Tools",
               code: "T18",
             },
             {
               customIcon: ``,
               name: "video",
-              category: "Component",
+              category: "Tools",
               code: "T19",
             },
           ];
@@ -952,7 +953,7 @@ const Editor = forwardRef((props: any, ref: any) => {
 
           const mapp = editor.Blocks.getAll().map((block: any) => ({
             name: block.id,
-            category: "Component",
+            category: "Tools",
           }));
           console.log(mapp);
           editor.runCommand("sw-visibility");
