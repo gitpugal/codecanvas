@@ -3418,8 +3418,8 @@ html {
   margin-bottom: 1.25rem;
   position: absolute;
   bottom: 1rem;
-  left: 4rem;
-  z-index: 50;
+  left: 1rem;
+  z-index: 101;
   width: fit-content;
   display: flex;
   flex-direction: row;
