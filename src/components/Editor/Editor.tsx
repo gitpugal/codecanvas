@@ -652,6 +652,9 @@ const Editor = forwardRef((props: any, ref: any) => {
           }
 
           const blocksWithCategory = [
+            { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
+            { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
+            { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
             {
               customIcon: `  <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -672,25 +675,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Blocks",
               code: "B4",
             },
-            { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
-            { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
-            { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
-            {
-              customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <rect width="24" height="24" fill="white"/>
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
-        </svg>
-        `,
-              name: "hero",
-              category: "Blocks",
-              code: "T8",
-            },
+
             {
               customIcon: ``,
               name: "column3-7",
@@ -750,6 +735,22 @@ const Editor = forwardRef((props: any, ref: any) => {
               name: "columns-a4",
               category: "Blocks",
               code: "B8",
+            },
+            {
+              customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <rect width="24" height="24" fill="white"/>
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
+        </svg>
+        `,
+              name: "hero",
+              category: "Blocks",
+              code: "T8",
             },
             {
               customIcon: ``,
