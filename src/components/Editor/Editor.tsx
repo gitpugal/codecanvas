@@ -921,10 +921,9 @@ const Editor = forwardRef((props: any, ref: any) => {
             setIsEditorLoaded(true);
             const gjsDiv = document.getElementById("gjs");
             if (gjsDiv && gjsDiv.clientWidth < 1200) {
-              var element = document.getElementsByClassName(
-                "gjs-blocks-c"
-              )[0] as HTMLElement;
-              if (element) {
+              var elements = document.getElementsByClassName("gjs-blocks-c");
+              for (var i = 0; i < elements.length; i++) {
+                var element = elements[i] as HTMLElement;
                 element.style.gridTemplateColumns = "repeat(2, 1fr)";
                 element.style.padding = "10px 30px";
                 console.log(element);
