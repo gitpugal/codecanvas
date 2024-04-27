@@ -3492,6 +3492,8 @@ html {
   overflow: auto;
   background-color: #f2f4fb !important;
   padding-bottom: 500px !important;
+  z-index: 100;
+
 }
 
 .gjs-cv-canvas__frames {
