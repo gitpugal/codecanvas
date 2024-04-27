@@ -919,6 +919,17 @@ const Editor = forwardRef((props: any, ref: any) => {
               sectors.models[index].attributes.open = true;
             }
             setIsEditorLoaded(true);
+            const gjsDiv = document.getElementById("gjs");
+            if (gjsDiv && gjsDiv.clientWidth < 1200) {
+              var element = document.getElementsByClassName(
+                "gjs-blocks-c"
+              )[0] as HTMLElement;
+              if (element) {
+                element.style.gridTemplateColumns = "repeat(2, 1fr)";
+                element.style.padding = "10px 30px";
+                console.log(element);
+              }
+            }
             props.onReady();
           });
           console.log(editor.StyleManager.getSectors());
