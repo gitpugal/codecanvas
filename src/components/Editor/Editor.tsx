@@ -55,8 +55,8 @@ const Editor = forwardRef((props: any, ref: any) => {
     var htmlMatch = htmlRegex.exec(fullHTML);
     var htmlContent = htmlMatch ? htmlMatch[1] : "";
 
-    // console.log("CSS Content:", cssContent);
-    // console.log("HTML Content:", htmlContent);
+    // // console.log("CSS Content:", cssContent);
+    // // console.log("HTML Content:", htmlContent);
 
     editor.setComponents(htmlContent);
     editor.setStyle(cssContent);
@@ -115,7 +115,7 @@ const Editor = forwardRef((props: any, ref: any) => {
       // setAuthData(data);
       return data;
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       setIsEditorLoaded(false);
       return false;
     }
@@ -124,7 +124,7 @@ const Editor = forwardRef((props: any, ref: any) => {
     const initEditor = async () => {
       if (editorContainerRef.current !== null) {
         const data = await verify();
-        console.log(data);
+        // console.log(data);
         if (data && data.authenticated == true) {
           setUserData(data?.user);
           const editor: any = grapesJS.init({
@@ -202,7 +202,7 @@ const Editor = forwardRef((props: any, ref: any) => {
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                   const dataURL: any = e?.target?.result;
-                  console.log("Data URL:", dataURL);
+                  // console.log("Data URL:", dataURL);
                   const base64Data = dataURL?.split(",")[1];
                   const jsonBlob = new Blob([JSON.stringify(base64Data)], {
                     type: "application/json",
@@ -230,7 +230,7 @@ const Editor = forwardRef((props: any, ref: any) => {
 
                   // uploadFile(dataURL.split(",")[1], name + ".jpeg").then(
                   //   (res) => {
-                  //     console.log(res);
+                  //     // console.log(res);
                   //     editor?.AssetManager?.add(res);
                   //   }
                   // );
@@ -512,8 +512,8 @@ const Editor = forwardRef((props: any, ref: any) => {
 
           editor.Commands.add("exportHTML", {
             run: async (editor: any, sender: any) => {
-              console.log(editor.getHtml());
-              console.log(editor.getCss());
+              // console.log(editor.getHtml());
+              // console.log(editor.getCss());
             },
           });
 
@@ -594,7 +594,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           });
 
-          console.log(panelManager.getPanels());
+          // console.log(panelManager.getPanels());
 
           if (!panelManager.getPanel("db")) {
             panelManager.addPanel({
@@ -736,22 +736,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Blocks",
               code: "B8",
             },
-            {
-              customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <rect width="24" height="24" fill="white"/>
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
-        </svg>
-        `,
-              name: "hero",
-              category: "Blocks",
-              code: "T8",
-            },
+
             {
               customIcon: ``,
               name: "list-items",
@@ -789,6 +774,22 @@ const Editor = forwardRef((props: any, ref: any) => {
               name: "divider",
               category: "Tools",
               code: "T5",
+            },
+            {
+              customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <rect width="24" height="24" fill="white"/>
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
+        </svg>
+        `,
+              name: "hero",
+              category: "Tools",
+              code: "T8",
             },
             {
               customIcon: ``,
@@ -888,7 +889,7 @@ const Editor = forwardRef((props: any, ref: any) => {
                   }
                   return bm.get(block.name).set("category", block.category);
                 } else {
-                  console.log(block.name);
+                  // console.log(block.name);
                 }
               })
             );
@@ -914,7 +915,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               }
             });
             const sectors = editor.StyleManager.getSectors();
-            console.log(sectors);
+            // console.log(sectors);
             for (let index = 0; index < sectors.models.length; index++) {
               sectors.models[index].attributes.open = true;
             }
@@ -925,13 +926,12 @@ const Editor = forwardRef((props: any, ref: any) => {
               for (var i = 0; i < elements.length; i++) {
                 var element = elements[i] as HTMLElement;
                 element.style.gridTemplateColumns = "repeat(2, 1fr)";
-                element.style.padding = "10px 30px";
-                console.log(element);
+                element.style.padding = "0px 30px";
               }
             }
             props.onReady();
           });
-          console.log(editor.StyleManager.getSectors());
+          // console.log(editor.StyleManager.getSectors());
           editor.StyleManager.removeProperty(
             editor.StyleManager.getSectors().models[0].cid,
             "margin"
@@ -957,7 +957,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             name: block.id,
             category: "Tools",
           }));
-          console.log(mapp);
+          // console.log(mapp);
           editor.runCommand("sw-visibility");
           document?.getElementById("blocks-button")?.click();
           setEditor(editor);
