@@ -21,8 +21,8 @@ import newsLetter from "grapesjs-preset-newsletter";
 import React, { forwardRef, useImperativeHandle } from "react";
 
 const Editor = forwardRef((props: any, ref: any) => {
+  //  export html function code
   const exportHTML = () => {
-    // Perform some logic to get the return value
     const html: any = editor.getHtml();
     const css: any = editor.getCss();
     const result = `<html>
@@ -33,6 +33,8 @@ const Editor = forwardRef((props: any, ref: any) => {
     </head>
     ${html}
     </html>`;
+
+    // incrementing export count by one using API
     fetch("https://backend.editor.leadsx10.io/api/auth/html-exports", {
       method: "POST",
       headers: {
@@ -45,6 +47,7 @@ const Editor = forwardRef((props: any, ref: any) => {
     return result;
   };
 
+  // This function is used for rendering intial html provided by the user
   const loadHTML = (fullHTML: string) => {
     var cssRegex = /<style>([\s\S]+?)<\/style>/i;
     var htmlRegex = /<\/head>([\s\S]+?)<\/html>/i;
@@ -63,6 +66,7 @@ const Editor = forwardRef((props: any, ref: any) => {
   };
 
   const [errMessage, setErrMessage] = useState(null);
+
   // Expose handleReturnValue function through ref
   useImperativeHandle(ref, () => ({
     exportHTML: () => {
@@ -75,21 +79,13 @@ const Editor = forwardRef((props: any, ref: any) => {
     },
   }));
 
-  // Design MJML
   const editorContainerRef = useRef(null);
-  const [modalopen, setmodalopen] = useState(false);
-  const elementRef = useRef(null);
-  const [templateHtml, setTemplateHtml] = useState("");
   const [isEditorLoaded, setIsEditorLoaded] = useState(false);
   const [editor, setEditor]: any = useState(null);
   const [userData, setUserData] = useState(null);
-  let isFirstAssetAdded = false;
-  {
-    /* New */
-  }
 
-  const [linkModalOpen, setLinkModalOpen] = useState(false);
-
+  // this function is used verify the user API_key using the backend and gets the user data uses it to render user project
+  // information like allowed blocks, domains etc,.
   const verify = async () => {
     try {
       // setIsEditorLoaded(true);
@@ -120,15 +116,26 @@ const Editor = forwardRef((props: any, ref: any) => {
       return false;
     }
   };
+
+  // This is the main useEffect where all the user verification and grapesjs editor initialisation is done.
   useEffect(() => {
+    // This is the main function used to initialse the editor.
     const initEditor = async () => {
       if (editorContainerRef.current !== null) {
+        // First we are calling the verify function to get the user details for the given API_KEY by the user in editor props.
         const data = await verify();
-        // console.log(data);
+
+        // So now if the user is authenticated and verified we are proceeding to initialse the grapesjs editor with the user data
+        // we got from the verify function
         if (data && data.authenticated == true) {
           setUserData(data?.user);
+          console.log(data?.user);
+          // This is where the actual grapesjs initialsation starts using grapesjs.init()
           const editor: any = grapesJS.init({
+            // this is the container where will display the editor.
             container: editorContainerRef.current,
+
+            // mentioning external plugins that we used in the editor
             plugins: [
               blocks,
               // forms,
@@ -143,6 +150,7 @@ const Editor = forwardRef((props: any, ref: any) => {
               newsLetter,
             ],
 
+            // options for the customising the external plugins that we had used
             pluginsOpts: {
               blocks: { flexGrid: true },
               tuiEditor: {
@@ -181,8 +189,13 @@ const Editor = forwardRef((props: any, ref: any) => {
                 },
               },
             },
+
+            // we set the storage manager to false because we dont want backup of the design on reload of the window.
             storageManager: false,
+
             assetManager: {
+              // this function uploads the assets that are imported by the user using the assetmanager the API that we provide
+              // and use our API as storage bucket
               uploadFile: (e: any) => {
                 const file = e.dataTransfer
                   ? e.dataTransfer.files[0]
@@ -237,38 +250,61 @@ const Editor = forwardRef((props: any, ref: any) => {
                 };
                 reader.readAsDataURL(file);
               },
+
+              // default assets that must be displayed at the initialisation of the editor.
               assets: data?.images ? data?.images : [],
             },
+            canvasCss: `
+            .gjs-selected {
+                border-radius: 8px !important;
+                outline-width: 3px !important;
+            }
+       `,
           });
 
           const panelManager = editor.Panels;
           const blockManager = editor.BlockManager;
 
+          // Below code is used to add custom blocks to the editor
+
+          blockManager.add("custom-link", {
+            label: "Link Button",
+            content: `<a class="custom-button">Link Button</a>`,
+            category: "section",
+            attributes: { class: "fa " },
+          });
+
+          blockManager.add("custom-button", {
+            label: "Button",
+            content: `<button class="custom-button">Send</button>`,
+            category: "section",
+            attributes: { class: "fa " },
+          });
           blockManager.add("columns-4", {
             label: "4 Columns",
             content: `<div class="gjs-row">
-          <div class="gjs-cell col-4" ></div>
-          <div class="gjs-cell col-4" ></div>
-          <div class="gjs-cell col-4" ></div>
-          <div class="gjs-cell col-4" ></div>
-        </div>`,
+        <div class="gjs-cell col-4" ></div>
+        <div class="gjs-cell col-4" ></div>
+        <div class="gjs-cell col-4" ></div>
+        <div class="gjs-cell col-4" ></div>
+      </div>`,
             category: "section",
             media: `<svg style="width:40px;height:40px" viewBox="0 0 40 40">
-        <path d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
-    </svg>`,
+      <path d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+  </svg>`,
             attributes: {
               style: {},
             },
           });
 
           blockManager.add("columns-4a", {
-            label: "4 Columns alt 1/3",
+            label: "2/4/2/4 Columns",
             content: `<div class="gjs-row">
-          <div class="gjs-cell col-17" ></div>
-          <div class="gjs-cell col-33" ></div>
-          <div class="gjs-cell col-17" ></div>
-          <div class="gjs-cell col-33" ></div>
-        </div>`,
+        <div class="gjs-cell col-17" ></div>
+        <div class="gjs-cell col-33" ></div>
+        <div class="gjs-cell col-17" ></div>
+        <div class="gjs-cell col-33" ></div>
+      </div>`,
             category: "section",
 
             attributes: { class: "fa  text-center" },
@@ -276,23 +312,23 @@ const Editor = forwardRef((props: any, ref: any) => {
           });
 
           blockManager.add("columns-a4", {
-            label: "4 Columns alt 3/1",
+            label: "4/2/4/2 Columns",
             content: `<div class="gjs-row">
+      <div class="gjs-cell col-33" ></div>
+        <div class="gjs-cell col-17" ></div>
         <div class="gjs-cell col-33" ></div>
-          <div class="gjs-cell col-17" ></div>
-          <div class="gjs-cell col-33" ></div>
-          <div class="gjs-cell col-17" ></div>
-        </div>`,
+        <div class="gjs-cell col-17" ></div>
+      </div>`,
             category: "section",
 
             attributes: { class: "fa  text-center" },
           });
           blockManager.add("columns-3/7", {
-            label: "2Columns 7/3",
+            label: "8/4 Columns",
             content: `<div class="gjs-row">
-          <div class="gjs-cell col-7" ></div>
-          <div class="gjs-cell col-3" ></div>
-        </div>`,
+        <div class="gjs-cell col-7" ></div>
+        <div class="gjs-cell col-3" ></div>
+      </div>`,
             category: "section",
             attributes: { class: "fa " },
           });
@@ -300,25 +336,25 @@ const Editor = forwardRef((props: any, ref: any) => {
           blockManager.add("hero", {
             label: "Hero",
             content: `<div class="gjs-hero">
-          <h2 class="gjs-hero-h2">Your Title</h2>
-        </div>`,
-            category: "Tools",
+        <h2 class="gjs-hero-h2">Your Title</h2>
+      </div>`,
+            category: "Component",
             attributes: { class: "fa fa-box" },
           });
 
           blockManager.add("list", {
             label: "List",
             content: `<ul class="gjs-list">
-            <h3><b>List Title</b></h3>
-          <li>List Items</li>
-          <li>List Items</li>
-          <li>List Items</li>
-          <li>List Items</li>
-        </div>`,
+          <h3><b>List Title</b></h3>
+        <li>List Items</li>
+        <li>List Items</li>
+        <li>List Items</li>
+        <li>List Items</li>
+      </div>`,
             category: "section",
             media: `<svg style="width:40px;height:40px" viewBox="0 0 40 40">
-        <path d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
-    </svg>`,
+      <path d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+  </svg>`,
             attributes: {
               style: {},
             },
@@ -327,56 +363,56 @@ const Editor = forwardRef((props: any, ref: any) => {
           blockManager.add("spacer", {
             label: "Spacer",
             content: `<div class="gjs-spacer">
-        </div>`,
+      </div>`,
             category: "section",
           });
 
           blockManager.add("social-elements", {
             label: "Socials",
             content: `
-           <div class="social-icons-container">
-            <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-            <img
-            width="30px" style="margin: 5px 5px;"
-            href="/"
-            src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/whatsapp.png"
-            >
-            </a>
-            <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-            <img
-            width="30px" style="margin: 5px 5px;"
-            href="/"
-            src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/linkedin.png"
-            >
-            </a> <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-            <img
-            width="30px" style="margin: 5px 5px;"
-            href="/"
-            src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/youtube.png"
-            >
-            </a>
-             <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-            <img
-            width="30px" style="margin: 5px 5px;"
-            href="/"
-            src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/instagram.png"
-            >
-            </a>
-            <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-            <img
-            width="30px" style="margin: 5px 5px;"
-            href="/"
-            src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/twitter.png"
-            >
-            </a>   <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
-            <img
-            width="30px" style="margin: 5px 5px;"
-            href="/"
-            src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/facebook.png"
-            >
-            </a>
-            </div>
-            `,
+         <div class="social-icons-container">
+          <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
+          <img
+          width="30px" style="margin: 5px 5px;"
+          href="/"
+          src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/whatsapp.png"
+          >
+          </a>
+          <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
+          <img
+          width="30px" style="margin: 5px 5px;"
+          href="/"
+          src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/linkedin.png"
+          >
+          </a> <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
+          <img
+          width="30px" style="margin: 5px 5px;"
+          href="/"
+          src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/youtube.png"
+          >
+          </a>
+           <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
+          <img
+          width="30px" style="margin: 5px 5px;"
+          href="/"
+          src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/instagram.png"
+          >
+          </a>
+          <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
+          <img
+          width="30px" style="margin: 5px 5px;"
+          href="/"
+          src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/twitter.png"
+          >
+          </a>   <a class="headlink" href="https://www.google.com"style="font-size: 50px;">
+          <img
+          width="30px" style="margin: 5px 5px;"
+          href="/"
+          src="https://app-leadsx10.s3.ap-south-1.amazonaws.com/leadsx10/theme/v1/icons/ico-social/facebook.png"
+          >
+          </a>
+          </div>
+          `,
             category: "components",
             attributes: {
               class: "fa social-custom-icon",
@@ -389,6 +425,17 @@ const Editor = forwardRef((props: any, ref: any) => {
             "pointer-events": "none",
           });
 
+          editor.Css.setRule(".custom-button", {
+            "background-color": "#3b82f6",
+            "font-size": "15px",
+            padding: "7px 20px",
+            "border-radius": "5px",
+            border: "none",
+            color: "white",
+            display: "inline-block",
+            "text-decoration": "none",
+            "line-height": 1.5,
+          });
           editor.Css.setRule(".social-icons-container", {
             display: "flex",
             "align-items": "center",
@@ -414,24 +461,37 @@ const Editor = forwardRef((props: any, ref: any) => {
             "font-family": "sans-serif",
           });
           editor.Css.setRule(".col-4", { width: "25%" });
+          editor.Css.setRule(".gjs-custom-form", { padding: "10px" });
           editor.Css.setRule(".col-3", { width: "30%" });
           editor.Css.setRule(".col-7", { width: "70%" });
           editor.Css.setRule(".col-33", { width: "33%" });
 
           editor.Css.setRule(".gjs-cell", {
-            display: "table-cell",
-            height: "75px",
+            "min-height": "75px",
+            "flex-grow": 1,
+            "flex-basis": "100%",
           });
           editor.Css.setRule(".gjs-row", {
-            display: "table",
+            display: "flex",
+            "justify-content": "flex-start",
+            "align-items": "stretch",
+            "flex-wrap": "nowrap",
             padding: "10px",
-            width: "100%",
           });
 
+          editor.Css.addRules(
+            `@media (max-width: 768px) {
+        .gjs-row {
+          flex-wrap: wrap !important;
+        }
+      }`
+          );
           panelManager.removeButton("views", "open-sm");
           panelManager.removeButton("views", "open-tm");
           panelManager.removeButton("views", "open-layers");
           panelManager.removeButton("views", "open-blocks");
+
+          // These are the panel button that appear in right corner of the editor which are Blocks, Styles and settings panel button.
           panelManager.addButton("views", {
             id: "preview",
             label: "Components",
@@ -463,17 +523,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           });
 
-          document
-            .getElementById("blocks-button")
-            ?.addEventListener("click", () => {
-              setLinkModalOpen(false);
-            });
-          document
-            .getElementById("sm-button")
-            ?.addEventListener("click", () => {
-              setLinkModalOpen(false);
-            });
-
+          // The Below code is used add custom functions to the editor which then can be called by the blocks in the editor.
           editor.Commands.add("set-device-desktop", {
             run: (editor: any) => {
               editor.setDevice("Desktop");
@@ -495,13 +545,8 @@ const Editor = forwardRef((props: any, ref: any) => {
               editor.setDevice("Mobilee");
             },
           });
-          editor.Commands.add("customPreview", {
-            run: (editor: any) => {
-              setmodalopen(true);
-              // alert("preview mode on")
-            },
-          });
 
+          // The below code is used to add devices sizes for the user responsive styling the HTML design by the end user.
           editor.Devices.add({
             id: "tablet2",
             name: "Mobilee",
@@ -525,11 +570,6 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           });
 
-          editor.Commands.add("generateAiContent", {
-            run: (editor: any) => {
-              setmodalopen(true);
-            },
-          });
           //Undo
           editor.Commands.add("undo", {
             run: (editor: any) => editor.UndoManager.undo(),
@@ -559,6 +599,42 @@ const Editor = forwardRef((props: any, ref: any) => {
                 document?.getElementById("trait-button")?.click();
               }
               return;
+            },
+          });
+
+          editor.Components.addType("button", {
+            isComponent: (el: any) => el.tagName === "button",
+            model: {
+              defaults: {
+                traits: [
+                  {
+                    type: "text",
+                    name: "text",
+                    changeProp: true,
+                    label: "Text",
+                  },
+                  "id",
+                  "href",
+                ],
+              },
+            },
+          });
+
+          editor.Components.addType("custom-button", {
+            isComponent: (el: any) => el.tagName === "a",
+            model: {
+              defaults: {
+                traits: [
+                  {
+                    type: "text",
+                    name: "text",
+                    changeProp: true,
+                    label: "Text",
+                  },
+                  "id",
+                  "href",
+                ],
+              },
             },
           });
           rte.add("Shortcodes", {
@@ -594,8 +670,6 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           });
 
-          // console.log(panelManager.getPanels());
-
           if (!panelManager.getPanel("db")) {
             panelManager.addPanel({
               id: "db",
@@ -614,6 +688,13 @@ const Editor = forwardRef((props: any, ref: any) => {
                   command: "undo",
                   attributes: { title: "undo" },
                 },
+                // {
+                //   id: "visibility",
+                //   label: '<i class="fa fa-eye"></i>',
+                //   command: "sw-visibility",
+                //   toggle: false,
+                //   attributes: { title: "visibility" },
+                // },
               ],
             });
           }
@@ -651,26 +732,27 @@ const Editor = forwardRef((props: any, ref: any) => {
               .classList.remove("gjs-one-bg");
           }
 
+          // These are all of the available block that are in the editor.
           const blocksWithCategory = [
             { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
             { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
             { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
             {
               customIcon: `  <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path
-              d="M2 3h20v16H2V3zM6 3v16M12 3v16M17 3v16"
-              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
               fill="none"
-            />
-          </svg>`,
+              stroke="black"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path
+                d="M2 3h20v16H2V3zM6 3v16M12 3v16M17 3v16"
+                stroke="currentColor"
+                fill="none"
+              />
+            </svg>`,
               name: "columns-4",
               category: "Blocks",
               code: "B4",
@@ -684,54 +766,54 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
             {
               customIcon: `<svg viewBox="0 0 24 24" transform="scale(-1, 1)">
-            <g>
-              <path fill="currentColor" d="M2 20h5V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1Z"></path>
-              <path fill="currentColor" d="M10 20h12V4H10v16Zm-1 0V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1Z"></path>
-            </g>
-          </svg>
-          `,
+              <g>
+                <path fill="currentColor" d="M2 20h5V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1Z"></path>
+                <path fill="currentColor" d="M10 20h12V4H10v16Zm-1 0V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1Z"></path>
+              </g>
+            </svg>
+            `,
               name: "columns-3/7",
               category: "Blocks",
               code: "B6",
             },
             {
               customIcon: `<svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path
-              d="M2 3h20v16H2V3zM5 3v16M12 3v16M15 3v16"
-              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
               fill="none"
-            />
-          </svg>`,
+              stroke="black"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path
+                d="M2 3h20v16H2V3zM5 3v16M12 3v16M15 3v16"
+                stroke="currentColor"
+                fill="none"
+              />
+            </svg>`,
               name: "columns-4a",
               category: "Blocks",
               code: "B7",
             },
             {
               customIcon: `
-            <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path
-              d="M2 3h20v16H2V3zM9 3v16M12 3v16M19 3v16"
-              stroke="currentColor"
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
               fill="none"
-            />
-          </svg>
-            `,
+              stroke="black"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path
+                d="M2 3h20v16H2V3zM9 3v16M12 3v16M19 3v16"
+                stroke="currentColor"
+                fill="none"
+              />
+            </svg>
+              `,
               name: "columns-a4",
               category: "Blocks",
               code: "B8",
@@ -743,9 +825,19 @@ const Editor = forwardRef((props: any, ref: any) => {
               category: "Tools",
               code: "T2",
             },
+            // {
+            //   customIcon: `<svg viewBox="0 0 24 24">
+            //   <path fill="currentColor" d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z"></path>
+            // </svg>`,
+            //   name: "button",
+            //   category: "Tools",
+            //   code: "T1",
+            // },
             {
-              customIcon: ``,
-              name: "button",
+              customIcon: `<svg viewBox="0 0 24 24">
+              <path fill="currentColor" d="M20 20.5C20 21.3 19.3 22 18.5 22H13C12.6 22 12.3 21.9 12 21.6L8 17.4L8.7 16.6C8.9 16.4 9.2 16.3 9.5 16.3H9.7L12 18V9C12 8.4 12.4 8 13 8S14 8.4 14 9V13.5L15.2 13.6L19.1 15.8C19.6 16 20 16.6 20 17.1V20.5M20 2H4C2.9 2 2 2.9 2 4V12C2 13.1 2.9 14 4 14H8V12H4V4H20V12H18V14H20C21.1 14 22 13.1 22 12V4C22 2.9 21.1 2 20 2Z"></path>
+          </svg>`,
+              name: "custom-button",
               category: "Tools",
               code: "T1",
             },
@@ -757,18 +849,18 @@ const Editor = forwardRef((props: any, ref: any) => {
               code: "T7",
             },
 
-            {
-              customIcon: ``,
-              name: "countdown",
-              category: "Tools",
-              code: "T3",
-            },
-            {
-              customIcon: ``,
-              name: "custom-code",
-              category: "Tools",
-              code: "T4",
-            },
+            // {
+            //   customIcon: ``,
+            //   name: "countdown",
+            //   category: "Tools",
+            //   code: "T3",
+            // },
+            // {
+            //   customIcon: ``,
+            //   name: "custom-code",
+            //   category: "Tools",
+            //   code: "T4",
+            // },
             {
               customIcon: ``,
               name: "divider",
@@ -777,16 +869,16 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
             {
               customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <rect width="24" height="24" fill="white"/>
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
-            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
-        </svg>
-        `,
+              <rect width="24" height="24" fill="white"/>
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
+          </svg>
+          `,
               name: "hero",
               category: "Tools",
               code: "T8",
@@ -799,14 +891,41 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
 
             {
-              customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>`,
+              customIcon: `
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-list"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M9 6l11 0" />
+                  <path d="M9 12l11 0" />
+                  <path d="M9 18l11 0" />
+                  <path d="M5 6l0 .01" />
+                  <path d="M5 12l0 .01" />
+                  <path d="M5 18l0 .01" />
+                </svg>
+              `,
               name: "list",
               category: "Tools",
               code: "T9",
             },
+            // {
+            //   customIcon: ``,
+            //   name: "link",
+            //   category: "Tools",
+            //   code: "T10",
+            // },
             {
-              customIcon: ``,
-              name: "link",
+              customIcon: `<svg viewBox="0 0 24 24">
+              <path fill="currentColor" d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z"></path>
+            </svg>`,
+              name: "custom-link",
               category: "Tools",
               code: "T10",
             },
@@ -817,13 +936,45 @@ const Editor = forwardRef((props: any, ref: any) => {
               code: "T11",
             },
             {
-              customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>`,
+              customIcon: `
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-share"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                  <path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                  <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                  <path d="M8.7 10.7l6.6 -3.4" />
+                  <path d="M8.7 13.3l6.6 3.4" />
+                </svg>
+              `,
               name: "social-elements",
               category: "Tools",
               code: "T12",
             },
             {
-              customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-space"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-3" /></svg>`,
+              customIcon: `
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-space"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M4 10v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-3" />
+                </svg>
+              `,
               name: "spacer",
               category: "Tools",
               code: "T13",
@@ -867,6 +1018,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             },
           ];
 
+          // in the below map funciton we are only taking the blocks that are allowed for the current user or API_KEY
           const AllowedBlocks = blocksWithCategory.filter(
             (block) =>
               data?.user?.features?.tools?.includes(block.code) ||
@@ -874,10 +1026,15 @@ const Editor = forwardRef((props: any, ref: any) => {
           );
 
           const bm = editor.BlockManager;
+          // We are here rendering the allowed blocks alone in the editor
           editor.on("load", () => {
+            editor.runCommand("sw-visibility");
             editor.BlockManager.render(
               AllowedBlocks.map((block) => {
                 if (bm.get(block.name)) {
+                  if (block.name == "column3-7") {
+                    bm.get(block.name).set("label", "4/8 Columns");
+                  }
                   if (block.name == "list-items") {
                     bm.get(block.name).set("label", "Articles");
                   }
@@ -888,32 +1045,9 @@ const Editor = forwardRef((props: any, ref: any) => {
                     bm.get(block.name).set("media", block.customIcon);
                   }
                   return bm.get(block.name).set("category", block.category);
-                } else {
-                  // console.log(block.name);
                 }
               })
             );
-
-            editor.on("component:add", (comp: any) => {
-              if (
-                comp?.attributes?.attributes?.src ==
-                  `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+` &&
-                !data?.user?.storage?.access_key_id
-              ) {
-                comp.remove();
-                alert("S3 Bucket Not Configured!");
-              }
-            });
-            editor.on("component:selected", (component: any) => {
-              if (
-                document.getElementById("sm-button") &&
-                !document
-                  ?.getElementById("sm-button")
-                  ?.classList.contains("gjs-pn-active")
-              ) {
-                document.getElementById("sm-button")?.click();
-              }
-            });
             const sectors = editor.StyleManager.getSectors();
             // console.log(sectors);
             for (let index = 0; index < sectors.models.length; index++) {
@@ -930,6 +1064,34 @@ const Editor = forwardRef((props: any, ref: any) => {
               }
             }
             props.onReady();
+          });
+
+          editor.on("component:add", (comp: any) => {
+            // Here we are checking whether the user bucket is configured and then allowing to add the image block.
+            if (
+              comp?.attributes?.attributes?.src ==
+                `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+` &&
+              !data?.user?.storage?.access_key_id
+            ) {
+              comp.remove();
+              alert("S3 Bucket Not Configured!");
+              // document.getElementById("blocks-button")?.click();
+            }
+          });
+          editor.on("component:selected", (component: any) => {
+            if (
+              document.getElementById("sm-button") &&
+              !document
+                ?.getElementById("sm-button")
+                ?.classList.contains("gjs-pn-active") &&
+              !(
+                component?.attributes?.attributes?.src ==
+                  `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+` &&
+                !data?.user?.storage?.access_key_id
+              )
+            ) {
+              document.getElementById("sm-button")?.click();
+            }
           });
           // console.log(editor.StyleManager.getSectors());
           editor.StyleManager.removeProperty(
@@ -953,12 +1115,7 @@ const Editor = forwardRef((props: any, ref: any) => {
             "margin-right"
           );
 
-          const mapp = editor.Blocks.getAll().map((block: any) => ({
-            name: block.id,
-            category: "Tools",
-          }));
-          // console.log(mapp);
-          editor.runCommand("sw-visibility");
+          //   editor.runCommand("sw-visibility");
           document?.getElementById("blocks-button")?.click();
           setEditor(editor);
           const customPanel = document.getElementById("custompanel");
@@ -980,6 +1137,8 @@ const Editor = forwardRef((props: any, ref: any) => {
     initEditor();
   }, [editorContainerRef]);
 
+  // this initial useEffect is used to add an unmount eventlistener to our editor component that calls the
+  // backend API telling that one editor instance had stopped
   useEffect(() => {
     const alertUser = (e: Event) => {
       e.preventDefault();
@@ -1004,6 +1163,7 @@ const Editor = forwardRef((props: any, ref: any) => {
 
   return (
     <div style={{ height: "100%", width: "100%", overflow: "hidden" }}>
+      {/* If the current user is not authenticated the below div shows the error message */}
       {errMessage && (
         <div
           style={{
@@ -1026,6 +1186,8 @@ const Editor = forwardRef((props: any, ref: any) => {
           </h2>
         </div>
       )}
+
+      {/* If the editor is fetching user information the loader is displayed */}
       {!isEditorLoaded && (
         <div
           style={{
@@ -1057,35 +1219,46 @@ const Editor = forwardRef((props: any, ref: any) => {
           }}
           id="custompanel"
         ></div>
+
+        {/* This is the leadsx10 label that is displayed on the right corner of the editor */}
         {userData && (
           <div
             style={{
               position: "absolute",
-              right: "3.125rem",
+              right: "1.5rem",
               bottom: "1.8rem",
               width: "28%",
-              height: "70px",
+              height: "50px",
               backgroundColor: "white",
               zIndex: 100,
               display: "flex",
               justifyItems: "center",
               alignItems: "center",
               justifyContent: "center",
-              // borderTop: "3px solid #009bff",
+              // borderTop: "1px solid #009bff",
             }}
             id="leadsx10label"
           >
             <p
               style={{
-                fontWeight: "bolder",
+                fontWeight: "500",
                 color: "#009bff",
               }}
             >
-              by LeadsX10
+              <span
+                style={{
+                  color: "gray",
+                  fontSize: "small",
+                }}
+              >
+                by
+              </span>{" "}
+              LeadsX10
             </p>
           </div>
         )}
 
+        {/* This is the container where editor is rendered */}
         <div
           style={{
             visibility: isEditorLoaded ? "visible" : "hidden",

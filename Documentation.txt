@@ -1,0 +1,690 @@
+1. exportHTML Function
+Description: This function is responsible for exporting the HTML content and CSS styles from the editor.
+Parameters: None
+Returns: String representing the exported HTML content with embedded CSS styles.
+Functionality:
+Retrieves HTML and CSS content from the editor.
+Constructs a complete HTML document with embedded CSS.
+Increments the export count by making a POST request to an API endpoint.
+Usage Example: Call this function when the user wants to export the content from the editor.
+
+
+
+2. loadHTML Function
+Description: This function is used to load initial HTML content into the editor.
+Parameters: fullHTML (String) - Full HTML content to be loaded.
+Returns: None
+Functionality:
+Parses the provided HTML string to extract CSS and HTML content.
+Sets the extracted CSS and HTML content to the editor.
+
+
+
+Usage Example: Call this function when you need to load HTML content into the editor.
+3. verify Function
+Description: This function verifies the user's API key with the backend and retrieves user data.
+Parameters: None
+Returns: Promise that resolves to user data if verification is successful, otherwise false.
+Functionality:
+Makes a POST request to a backend endpoint with the API key and domain.
+Handles the response and sets error message if verification fails.
+Usage Example: Call this function to verify the user's API key and retrieve user data.
+
+
+
+4. GrapesJS Initialization
+Description: Initializes the GrapesJS editor with specified options and plugins.
+Options:
+container: Container element for the editor.
+plugins: Array of plugins to be used in the editor.
+pluginsOpts: Options for customizing specific plugins.
+storageManager: Disables storage manager.
+assetManager: Configuration for asset management.
+Usage Example: Call this to initialize the GrapesJS editor with desired configurations.
+
+
+
+5. Custom Block Management
+Description: Adds custom blocks to the editor's block manager and sets custom CSS rules.
+Functionality:
+Adds custom blocks to the block manager.
+Sets custom CSS rules for specific elements.
+Usage Example: Use this to add custom blocks and define CSS rules for them.
+
+
+
+6. Panel Management
+Description: Adds panel buttons for Blocks, Styles, and Settings.
+Functionality: Adds buttons to the editor's panel manager.
+Usage Example: Use this to add panel buttons for quick access to Blocks, Styles, and Settings.
+
+
+
+7. Device Sizes
+Description: Adds device sizes for responsive design.
+Functionality: Adds device sizes to the editor's device manager.
+Usage Example: Use this to add device sizes for responsive design.
+
+
+
+8. Block Rendering
+Description: Renders allowed blocks in the editor based on user permissions.
+Functionality:
+Filters blocks based on user permissions.
+Renders allowed blocks in the editor.
+Usage Example: Automatically renders allowed blocks when the editor is loaded.
+
+
+
+9. Event Listener for Unmounting
+Description: Adds an event listener for unmounting the editor component.
+Functionality:
+Sends a POST request to the backend API when the editor component is about to be unloaded.
+Usage Example: Automatically triggers when the editor component is unmounted.
+
+
+
+====================================================================================================================================================================================
+
+
+
+1. export html function code:
+
+  const exportHTML = () => {
+    const html: any = editor.getHtml();
+    const css: any = editor.getCss();
+    const result = `<html>
+    <head>
+    <style>
+    ${css}
+    </style>
+    </head>
+    ${html}
+    </html>`;
+
+    // incrementing export count by one using API
+    fetch("https://backend.editor.leadsx10.io/api/auth/html-exports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        api_key: props.apiKey,
+      }),
+    });
+    return result;
+  };
+
+  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. This function is used for rendering intial html provided by the user:
+
+  const loadHTML = (fullHTML: string) => {
+    var cssRegex = /<style>([\s\S]+?)<\/style>/i;
+    var htmlRegex = /<\/head>([\s\S]+?)<\/html>/i;
+
+    var cssMatch = cssRegex.exec(fullHTML);
+    var cssContent = cssMatch ? cssMatch[1] : "";
+
+    var htmlMatch = htmlRegex.exec(fullHTML);
+    var htmlContent = htmlMatch ? htmlMatch[1] : "";
+
+    // // console.log("CSS Content:", cssContent);
+    // // console.log("HTML Content:", htmlContent);
+
+    editor.setComponents(htmlContent);
+    editor.setStyle(cssContent);
+  };
+
+  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  2. this function is used verify the user API_key using the backend and gets the user data uses it to render user project
+  // information like allowed blocks, domains etc,:
+  const verify = async () => {
+    try {
+      // setIsEditorLoaded(true);
+      const res = await fetch(
+        "https://backend.editor.leadsx10.io/api/auth/init",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            api_key: props.apiKey,
+            domain: window.location.hostname,
+          }),
+        }
+      );
+      if (res.status >= 400) {
+        const data = await res.json();
+        setErrMessage(data.message);
+        return false;
+      }
+      const data = await res.json();
+      // setAuthData(data);
+      return data;
+    } catch (e) {
+      // console.log(e);
+      setIsEditorLoaded(false);
+      return false;
+    }
+  };
+
+  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+3. This is where the actual grapesjs initialsation starts using grapesjs.init():
+
+          const editor: any = grapesJS.init({
+            // this is the container where will display the editor.
+            container: editorContainerRef.current,
+
+            // mentioning external plugins that we used in the editor
+            plugins: [
+              blocks,
+              // forms,
+              countdown,
+              exportPlugin,
+              tabs,
+              customCOde,
+              tooltip,
+              tuiEditor,
+              typed,
+              presetWebpage,
+              newsLetter,
+            ],
+
+            // options for the customising the external plugins that we had used
+            pluginsOpts: {
+              blocks: { flexGrid: true },
+              tuiEditor: {
+                script: [
+                  // 'https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.7/fabric.min.js',
+                  "https://uicdn.toast.com/tui.code-snippet/v1.5.2/tui-code-snippet.min.js",
+                  "https://uicdn.toast.com/tui-color-picker/v2.2.7/tui-color-picker.min.js",
+                  "https://uicdn.toast.com/tui-image-editor/v3.15.2/tui-image-editor.min.js",
+                ],
+                style: [
+                  "https://uicdn.toast.com/tui-color-picker/v2.2.7/tui-color-picker.min.css",
+                  "https://uicdn.toast.com/tui-image-editor/v3.15.2/tui-image-editor.min.css",
+                ],
+              },
+              tabs: {
+                tabsBlock: { category: "Extra" },
+              },
+              typed: {
+                block: {
+                  category: "Extra",
+                  content: {
+                    type: "typed",
+                    "type-speed": 40,
+                    strings: ["Text row one", "Text row two", "Text row three"],
+                  },
+                },
+              },
+              presetWebpage: {
+                modalImportTitle: "Import Template",
+                modalImportLabel:
+                  '<div style="margin-bottom: 10px; font-size: 13px;">Paste here your HTML/CSS and click Import</div>',
+                modalImportContent: function (editor: any) {
+                  return (
+                    editor.getHtml() + "<style>" + editor.getCss() + "</style>"
+                  );
+                },
+              },
+            },
+
+            // we set the storage manager to false because we dont want backup of the design on reload of the window.
+            storageManager: false,
+
+            assetManager: {
+              // this function uploads the assets that are imported by the user using the assetmanager the API that we provide
+              // and use our API as storage bucket
+              uploadFile: (e: any) => {
+                const file = e.dataTransfer
+                  ? e.dataTransfer.files[0]
+                  : e.target.files[0];
+                const maxFileSize = 2 * 1024 * 1024; // 2 MB
+                if (
+                  (data?.user?.plan?.name == "free" ||
+                    data?.user?.plan?.name == "Free") &&
+                  file &&
+                  file?.size > maxFileSize
+                ) {
+                  alert(
+                    "File size exceeds the maximum limit (2MB). Please choose a smaller file."
+                  );
+                  return;
+                }
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                  const dataURL: any = e?.target?.result;
+                  // console.log("Data URL:", dataURL);
+                  const base64Data = dataURL?.split(",")[1];
+                  const jsonBlob = new Blob([JSON.stringify(base64Data)], {
+                    type: "application/json",
+                  });
+                  let formData = new FormData();
+                  const name = file?.name
+                    ?.replace(/\.[^.]+$/, "")
+                    .replace(" ", "_");
+                  formData.append("file", jsonBlob);
+                  formData.append("name", name);
+                  formData.append("api_key", data?.user?.api_key);
+                  const res = await fetch(
+                    "https://backend.editor.leadsx10.io/api/bucket/upload",
+                    {
+                      method: "POST",
+                      body: formData,
+                    }
+                  );
+                  if (res && res?.status == 200) {
+                    const data = await res.json();
+                    editor?.AssetManager?.add(data.url);
+                  } else {
+                    alert("Unauthorised Access or domain not allowed!");
+                  }
+
+                  // uploadFile(dataURL.split(",")[1], name + ".jpeg").then(
+                  //   (res) => {
+                  //     // console.log(res);
+                  //     editor?.AssetManager?.add(res);
+                  //   }
+                  // );
+                };
+                reader.readAsDataURL(file);
+              },
+
+              // default assets that must be displayed at the initialisation of the editor.
+              assets: data?.images ? data?.images : [],
+            },
+          });
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5. Below code is used to add custom blocks to the editor:
+
+  const blockManager = editor.BlockManager;
+
+          blockManager.add("columns-4", {
+            label: "4 Columns",
+            content: `<div class="gjs-row">
+          <div class="gjs-cell col-4" ></div>
+          <div class="gjs-cell col-4" ></div>
+          <div class="gjs-cell col-4" ></div>
+          <div class="gjs-cell col-4" ></div>
+        </div>`,
+            category: "section",
+            media: `<svg style="width:40px;height:40px" viewBox="0 0 40 40">
+        <path d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+    </svg>`,
+            attributes: {
+              style: {},
+            },
+          });
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+// Below code used add custom css to the editor that will be used by the custom blocks that we added above.
+          editor.Css.setRule(".social-icons-container", {
+            display: "flex",
+            "align-items": "center",
+            "justify-items": "center",
+            "justify-content": "center",
+            gap: "5px",
+          });
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+ 6. These are the panel button that appear in right corner of the editor which are Blocks, Styles and settings panel button.
+          panelManager.addButton("views", {
+            id: "preview",
+            label: "Components",
+            command: "open-blocks",
+            attributes: {
+              title: "Components",
+              id: "blocks-button",
+              class: "tabButtons",
+            },
+          });
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+7. The below code is used to add devices sizes for the user responsive styling the HTML design by the end user:
+          editor.Devices.add({
+            id: "tablet2",
+            name: "Mobilee",
+            width: "400px",
+            widthMedia: "810px",
+            height: "100%",
+          });
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+8. These are all of the available block that are in the editor:
+          const blocksWithCategory = [
+            { customIcon: ``, name: "column1", category: "Blocks", code: "B1" },
+            { customIcon: ``, name: "column2", category: "Blocks", code: "B2" },
+            { customIcon: ``, name: "column3", category: "Blocks", code: "B3" },
+            {
+              customIcon: `  <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path
+              d="M2 3h20v16H2V3zM6 3v16M12 3v16M17 3v16"
+              stroke="currentColor"
+              fill="none"
+            />
+          </svg>`,
+              name: "columns-4",
+              category: "Blocks",
+              code: "B4",
+            },
+
+            {
+              customIcon: ``,
+              name: "column3-7",
+              category: "Blocks",
+              code: "B5",
+            },
+            {
+              customIcon: `<svg viewBox="0 0 24 24" transform="scale(-1, 1)">
+            <g>
+              <path fill="currentColor" d="M2 20h5V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1Z"></path>
+              <path fill="currentColor" d="M10 20h12V4H10v16Zm-1 0V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1Z"></path>
+            </g>
+          </svg>
+          `,
+              name: "columns-3/7",
+              category: "Blocks",
+              code: "B6",
+            },
+            {
+              customIcon: `<svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path
+              d="M2 3h20v16H2V3zM5 3v16M12 3v16M15 3v16"
+              stroke="currentColor"
+              fill="none"
+            />
+          </svg>`,
+              name: "columns-4a",
+              category: "Blocks",
+              code: "B7",
+            },
+            {
+              customIcon: `
+            <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path
+              d="M2 3h20v16H2V3zM9 3v16M12 3v16M19 3v16"
+              stroke="currentColor"
+              fill="none"
+            />
+          </svg>
+            `,
+              name: "columns-a4",
+              category: "Blocks",
+              code: "B8",
+            },
+
+            {
+              customIcon: ``,
+              name: "list-items",
+              category: "Tools",
+              code: "T2",
+            },
+            {
+              customIcon: ``,
+              name: "button",
+              category: "Tools",
+              code: "T1",
+            },
+
+            {
+              customIcon: ``,
+              name: "grid-items",
+              category: "Tools",
+              code: "T7",
+            },
+
+            {
+              customIcon: ``,
+              name: "countdown",
+              category: "Tools",
+              code: "T3",
+            },
+            {
+              customIcon: ``,
+              name: "custom-code",
+              category: "Tools",
+              code: "T4",
+            },
+            {
+              customIcon: ``,
+              name: "divider",
+              category: "Tools",
+              code: "T5",
+            },
+            {
+              customIcon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <rect width="24" height="24" fill="white"/>
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3l-6 6" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3l-7 7" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 3l-7 7" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 6l-4 4" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18" />
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 10v11" />
+        </svg>
+        `,
+              name: "hero",
+              category: "Tools",
+              code: "T8",
+            },
+            {
+              customIcon: ``,
+              name: "image",
+              category: "Tools",
+              code: "T6",
+            },
+
+            {
+              customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>`,
+              name: "list",
+              category: "Tools",
+              code: "T9",
+            },
+            {
+              customIcon: ``,
+              name: "link",
+              category: "Tools",
+              code: "T10",
+            },
+            {
+              customIcon: ``,
+              name: "quote",
+              category: "Tools",
+              code: "T11",
+            },
+            {
+              customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>`,
+              name: "social-elements",
+              category: "Tools",
+              code: "T12",
+            },
+            {
+              customIcon: `<svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-space"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-3" /></svg>`,
+              name: "spacer",
+              category: "Tools",
+              code: "T13",
+            },
+
+            {
+              customIcon: ``,
+              name: "tabs",
+              category: "Tools",
+              code: "T14",
+            },
+            {
+              customIcon: ``,
+              name: "text",
+              category: "Tools",
+              code: "T15",
+            },
+            {
+              customIcon: ``,
+              name: "text-basic",
+              category: "Tools",
+              code: "T16",
+            },
+            {
+              customIcon: ``,
+              name: "tooltip",
+              category: "Tools",
+              code: "T17",
+            },
+            {
+              customIcon: ``,
+              name: "typed",
+              category: "Tools",
+              code: "T18",
+            },
+            {
+              customIcon: ``,
+              name: "video",
+              category: "Tools",
+              code: "T19",
+            },
+          ];
+
+
+ // in the below map funciton we are only taking the blocks that are allowed for the current user or API_KEY
+          const AllowedBlocks = blocksWithCategory.filter(
+            (block) =>
+              data?.user?.features?.tools?.includes(block.code) ||
+              data?.user?.features?.blocks?.includes(block.code)
+          );
+
+          const bm = editor.BlockManager;
+          // We are here rendering the allowed blocks alone in the editor
+          editor.on("load", () => {
+            editor.BlockManager.render(
+              AllowedBlocks.map((block) => {
+                if (bm.get(block.name)) {
+                  if (block.name == "list-items") {
+                    bm.get(block.name).set("label", "Articles");
+                  }
+                  if (block.name == "grid-items") {
+                    bm.get(block.name).set("label", "Cards");
+                  }
+                  if (block.customIcon.length > 0) {
+                    bm.get(block.name).set("media", block.customIcon);
+                  }
+                  return bm.get(block.name).set("category", block.category);
+                } else {
+                  // console.log(block.name);
+                }
+              })
+            );
+
+            editor.on("component:add", (comp: any) => {
+              // Here we are checking whether the user bucket is configured and then allowing to add the image block.
+              if (
+                comp?.attributes?.attributes?.src ==
+                  `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+` &&
+                !data?.user?.storage?.access_key_id
+              ) {
+                comp.remove();
+                alert("S3 Bucket Not Configured!");
+              }
+            });
+            editor.on("component:selected", (component: any) => {
+              if (
+                document.getElementById("sm-button") &&
+                !document
+                  ?.getElementById("sm-button")
+                  ?.classList.contains("gjs-pn-active")
+              ) {
+                document.getElementById("sm-button")?.click();
+              }
+            });
+            const sectors = editor.StyleManager.getSectors();
+            // console.log(sectors);
+            for (let index = 0; index < sectors.models.length; index++) {
+              sectors.models[index].attributes.open = true;
+            }
+            setIsEditorLoaded(true);
+            const gjsDiv = document.getElementById("gjs");
+            if (gjsDiv && gjsDiv.clientWidth < 1200) {
+              var elements = document.getElementsByClassName("gjs-blocks-c");
+              for (var i = 0; i < elements.length; i++) {
+                var element = elements[i] as HTMLElement;
+                element.style.gridTemplateColumns = "repeat(2, 1fr)";
+                element.style.padding = "0px 30px";
+              }
+            }
+            props.onReady();
+          });
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+  9. this initial useEffect is used to add an unmount eventlistener to our editor component that calls the
+  // backend API telling that one editor instance had stopped
+  useEffect(() => {
+    const alertUser = (e: Event) => {
+      e.preventDefault();
+      fetch("https://backend.editor.leadsx10.io/api/auth/exit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          domain: window.location.hostname,
+          api_key: props.apiKey,
+        }),
+      });
+    };
+
+    window.addEventListener("beforeunload", alertUser, { capture: true });
+
+    return () => {
+      window.removeEventListener("beforeunload", alertUser, { capture: true });
+    };
+  }, []);
